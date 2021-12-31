@@ -10,21 +10,29 @@ import java.util.Objects;
 
 public class MultiplexState {
 
-    private List<Theater> theaterList = new ArrayList<Theater>();
+    private List<Theater> theaterList = new ArrayList<>();
+    private List<Film> filmList = new ArrayList<>();
 
     public MultiplexState(CinemaTicketDispenser dispenser, UrjcBankServer bank) throws FileNotFoundException {
 
+        File moviesDir = new File("./src/resources/movies/txt/");
         File theatersDir = new File("./src/resources/theaters/");
-        File moviesDir = new File("./src/resources/movies/");
 
-        // searches theatres in path
-        fileSearch(Objects.requireNonNull(theatersDir.listFiles()));
         // searches movies in path
-        //fileSearch(Objects.requireNonNull(moviesDir.listFiles()));
+        this.movieSearch(Objects.requireNonNull(moviesDir.listFiles()));
+        // searches theatres in path
+        this.theaterSearch(Objects.requireNonNull(theatersDir.listFiles()));
 
     }
 
-    private void fileSearch(File[] files) throws FileNotFoundException {
+    private void movieSearch(File[] files) throws FileNotFoundException {
+        for (File file: files) {
+            Film film = new Film(file);
+            filmList.add(film);
+        }
+    }
+
+    private void theaterSearch(File[] files) throws FileNotFoundException {
         for (File file: files) {
             Theater theater = new Theater(file);
             theaterList.add(theater);

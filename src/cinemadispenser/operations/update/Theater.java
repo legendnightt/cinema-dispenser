@@ -3,10 +3,7 @@ package cinemadispenser.operations.update;
 import java.io.File;
 import java.io.FileNotFoundException;
 import java.io.FileReader;
-import java.util.HashSet;
-import java.util.List;
-import java.util.Scanner;
-import java.util.Set;
+import java.util.*;
 
 public class Theater {
 
@@ -16,7 +13,7 @@ public class Theater {
     private int number;
     private int price;
     private Set<Seat> seatSet = new HashSet<>();
-    private List<Film> filmList;
+    private List<Film> filmList = new ArrayList<>();
 
     public Theater(File file) throws FileNotFoundException {
         this.setNumber(file);
