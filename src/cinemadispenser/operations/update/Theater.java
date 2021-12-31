@@ -19,9 +19,9 @@ public class Theater {
     private List<Film> filmList;
 
     public Theater(File file) throws FileNotFoundException {
-        setNumber(file);
-        setPrice();
-        generateSeatSet(file);
+        this.setNumber(file);
+        this.setPrice();
+        this.generateSeatSet(file);
     }
 
     private void setNumber(File file) {
