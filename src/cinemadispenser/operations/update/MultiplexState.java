@@ -1,5 +1,8 @@
 package cinemadispenser.operations.update;
 
+import sienens.CinemaTicketDispenser;
+import urjc.UrjcBankServer;
+
 import java.io.*;
 import java.util.ArrayList;
 import java.util.List;
@@ -9,7 +12,7 @@ public class MultiplexState {
 
     private List<Theater> theaterList = new ArrayList<Theater>();
 
-    public MultiplexState() throws FileNotFoundException {
+    public MultiplexState(CinemaTicketDispenser dispenser, UrjcBankServer bank) throws FileNotFoundException {
 
         File theatersDir = new File("./src/resources/theaters/");
         File moviesDir = new File("./src/resources/movies/");

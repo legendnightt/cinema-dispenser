@@ -1,6 +1,8 @@
 package cinemadispenser.operations;
 
 import cinemadispenser.operations.update.MultiplexState;
+import sienens.CinemaTicketDispenser;
+import urjc.UrjcBankServer;
 
 import java.io.FileNotFoundException;
 import java.util.Date;
@@ -9,12 +11,12 @@ import java.util.TimerTask;
 
 public class MovieTicketSale {
 
-    public MovieTicketSale() {
-        PerformPayment payment = new PerformPayment();
-        update();
+    public MovieTicketSale(CinemaTicketDispenser dispenser, UrjcBankServer bank) {
+        PerformPayment payment = new PerformPayment(bank);
+        this.update(dispenser, bank);
     }
 
-    private void update() {
+    private void update(CinemaTicketDispenser dispenser, UrjcBankServer bank) {
 
         Date date = new Date();
         Timer timer = new Timer();
@@ -23,7 +25,7 @@ public class MovieTicketSale {
         timer.schedule(new TimerTask() {
             public void run() {
                 try {
-                    MultiplexState state = new MultiplexState();
+                    MultiplexState state = new MultiplexState(dispenser, bank);
                 } catch (FileNotFoundException e) {
                     e.printStackTrace();
                 }
