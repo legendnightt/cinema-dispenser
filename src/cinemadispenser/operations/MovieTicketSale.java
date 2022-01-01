@@ -18,10 +18,8 @@ public class MovieTicketSale {
     }
 
     private void update(CinemaTicketDispenser dispenser, UrjcBankServer bank) {
-
         Date date = new Date();
         Timer timer = new Timer();
-
         // timer since program starts until 24h after
         timer.schedule(new TimerTask() {
             public void run() {

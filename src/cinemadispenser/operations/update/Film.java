@@ -19,7 +19,7 @@ public class Film {
     private File poster;
 
     public Film(File file) throws FileNotFoundException, ParseException {
-        this.setInfo(file);
+        setInfo(file);
     }
 
     private String cleanLine(String line) {
@@ -27,10 +27,7 @@ public class Film {
     }
 
     private void setInfo(File file) throws FileNotFoundException, ParseException {
-
-        FileReader filmFile = new FileReader(file);
-        Scanner sc = new Scanner(filmFile);
-
+        Scanner sc = new Scanner(new FileReader(file));
         System.out.println("Going to start generating a film:");
         // while for getting movie config stuff
         while (sc.hasNextLine()) {
@@ -64,7 +61,6 @@ public class Film {
                 System.out.println("Poster: " + poster);
             }
         }
-
     }
 
     public int getTheater() {
