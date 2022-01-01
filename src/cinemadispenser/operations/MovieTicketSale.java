@@ -5,6 +5,7 @@ import sienens.CinemaTicketDispenser;
 import urjc.UrjcBankServer;
 
 import java.io.FileNotFoundException;
+import java.text.ParseException;
 import java.util.Date;
 import java.util.Timer;
 import java.util.TimerTask;
@@ -26,7 +27,7 @@ public class MovieTicketSale {
             public void run() {
                 try {
                     MultiplexState state = new MultiplexState(dispenser, bank);
-                } catch (FileNotFoundException e) {
+                } catch (FileNotFoundException | ParseException e) {
                     e.printStackTrace();
                 }
             }

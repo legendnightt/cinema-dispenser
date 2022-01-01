@@ -4,6 +4,7 @@ import sienens.CinemaTicketDispenser;
 import urjc.UrjcBankServer;
 
 import java.io.*;
+import java.text.ParseException;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Objects;
@@ -13,7 +14,7 @@ public class MultiplexState {
     private List<Theater> theaterList = new ArrayList<>();
     private List<Film> filmList = new ArrayList<>();
 
-    public MultiplexState(CinemaTicketDispenser dispenser, UrjcBankServer bank) throws FileNotFoundException {
+    public MultiplexState(CinemaTicketDispenser dispenser, UrjcBankServer bank) throws FileNotFoundException, ParseException {
 
         File moviesDir = new File("./src/resources/movies/txt/");
         File theatersDir = new File("./src/resources/theaters/");
@@ -25,7 +26,7 @@ public class MultiplexState {
 
     }
 
-    private void movieSearch(File[] files) throws FileNotFoundException {
+    private void movieSearch(File[] files) throws FileNotFoundException, ParseException {
         for (File file: files) {
             Film film = new Film(file);
             filmList.add(film);
