@@ -3,6 +3,8 @@ package cinemadispenser.operations.update;
 import java.io.File;
 import java.io.FileNotFoundException;
 import java.io.FileReader;
+import java.time.LocalTime;
+import java.time.format.DateTimeFormatter;
 import java.util.*;
 
 public class Theater {
@@ -19,7 +21,7 @@ public class Theater {
         setNumber(theaterFile);
         setPrice();
         generateSeatSet(theaterFile);
-        generateFilmList(moviesFiles);
+        generateFilmSessionList(moviesFiles);
     }
 
     /**
@@ -83,14 +85,16 @@ public class Theater {
     }
 
     /**
-     * Creates corresponding films to Theater & adds them into filmList
+     * Creates corresponding films to Theater & adds them into filmList,
+     * same with sessions with sessionList
      * @param files moviesFiles
      * @throws FileNotFoundException if moviesFiles doesn't exist
      */
-    private void generateFilmList (File[] files) throws FileNotFoundException {
+    private void generateFilmSessionList (File[] files) throws FileNotFoundException {
         for (File file: files) {
             Scanner sc = new Scanner(new FileReader(file));
             // while for searching theater films
+            boolean found = false;
             while (sc.hasNextLine()) {
                 String line = sc.nextLine();
                 if (line.startsWith("Theatre: ")) {
@@ -98,7 +102,21 @@ public class Theater {
                         if (Character.isDigit(ch) && number == Character.getNumericValue(ch)) {
                             System.out.println("Found film for theater: " + number);
                             filmList.add(new Film(file));
+                            found = true;
+                        } else {
+                            found = false;
                         }
+                    }
+                } else if (line.startsWith("Sessions: ") && found) {
+                    String sessions = line.substring(line.indexOf(":") + 1).trim();
+                    System.out.println("Sessions: " + sessions);
+                    // while for getting sessions from sessions string & converts them to LocalTime format to create new Session
+                    while (!sessions.isEmpty()) {
+                        sessionList.add(new Session(LocalTime.parse(sessions.substring(0, 5), DateTimeFormatter.ofPattern("HH:mm")), seatSet));
+                        sessions = sessions.substring(sessions.indexOf(":") + 3).trim();
+                    }
+                    for(Session session: sessionList) {
+                        System.out.println("Session: " + session.getHour());
                     }
                 }
             }
