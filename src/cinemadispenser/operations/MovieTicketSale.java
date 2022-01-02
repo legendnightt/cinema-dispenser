@@ -25,7 +25,7 @@ public class MovieTicketSale {
             public void run() {
                 try {
                     MultiplexState state = new MultiplexState(dispenser, bank);
-                } catch (FileNotFoundException | ParseException e) {
+                } catch (FileNotFoundException e) {
                     e.printStackTrace();
                 }
             }

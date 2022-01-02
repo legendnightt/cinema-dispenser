@@ -11,14 +11,13 @@ import java.util.*;
 
 public class Film {
 
-    private int theater;
     private String name;
     private String description;
     private final List<LocalTime> sessionList = new ArrayList<>();
     private int duration;
     private File poster;
 
-    public Film(File file) throws FileNotFoundException, ParseException {
+    public Film(File file) throws FileNotFoundException {
         setInfo(file);
     }
 
@@ -26,20 +25,13 @@ public class Film {
         return line.substring(line.indexOf(":") + 1).trim();
     }
 
-    private void setInfo(File file) throws FileNotFoundException, ParseException {
+    private void setInfo(File file) throws FileNotFoundException {
         Scanner sc = new Scanner(new FileReader(file));
         System.out.println("Going to start generating a film:");
         // while for getting movie config stuff
         while (sc.hasNextLine()) {
             String line = sc.nextLine();
-            if (line.startsWith("Theatre: ")) {
-                for (char ch: line.toCharArray()) {
-                    if (Character.isDigit(ch)) {
-                        theater = Character.getNumericValue(ch);
-                        System.out.println("Theater: " + theater);
-                    }
-                }
-            } else if (line.startsWith("Title: ")) {
+            if (line.startsWith("Title: ")) {
                 name = cleanLine(line);
                 System.out.println("Title: " + name);
             } else if (line.startsWith("Description: ")) {
@@ -63,10 +55,6 @@ public class Film {
         }
     }
 
-    public int getTheater() {
-        return theater;
-    }
-
     public String getName() {
         return name;
     }
@@ -79,7 +67,7 @@ public class Film {
         return poster;
     }
 
-    public List getSessionList() {
+    public List<LocalTime> getSessionList() {
         return sessionList;
     }
 
