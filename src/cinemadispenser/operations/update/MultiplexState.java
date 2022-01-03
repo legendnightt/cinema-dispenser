@@ -11,8 +11,13 @@ import java.util.Objects;
 public class MultiplexState {
 
     private final List<Theater> theaterList = new ArrayList<>();
-    private final List<Film> filmList = new ArrayList<>();
 
+    /**
+     * MultiplexState builder
+     * @param dispenser CinemaTicketDispenser dispenser
+     * @param bank UrjcBankServer bank
+     * @throws FileNotFoundException  if theaterFile or moviesFiles doesn't exist
+     */
     public MultiplexState(CinemaTicketDispenser dispenser, UrjcBankServer bank) throws FileNotFoundException {
         File moviesDir = new File("./src/resources/movies/txt/");
         File theatersDir = new File("./src/resources/theaters/");
@@ -20,10 +25,46 @@ public class MultiplexState {
         theaterSearch(Objects.requireNonNull(theatersDir.listFiles()), Objects.requireNonNull(moviesDir.listFiles()));
     }
 
+    /**
+     * Searches in File theaterFiles & creates new Theater(theaterFile, moviesFiles) inside theaterList
+     * @param theaterFiles File theaterFiles
+     * @param moviesFiles File moviesFiles
+     * @throws FileNotFoundException if theaterFile or moviesFiles doesn't exist
+     */
     private void theaterSearch(File[] theaterFiles, File[] moviesFiles) throws FileNotFoundException {
         for (File theaterFile: theaterFiles) {
             theaterList.add(new Theater(theaterFile, moviesFiles));
         }
+    }
+
+    /**
+     * Gets provided int number Theater
+     * @param number int number
+     * @return Theater theater
+     */
+    public Theater getTheater(int number) throws Exception {
+        for (Theater theater: theaterList) {
+            if (number == theater.getNumber()) {
+                return theater;
+            }
+        }
+        throw new RuntimeException("Theater number " + number + " not found");
+    }
+
+    /**
+     * Gets number of Theaters
+     * @return int size theaterList
+     */
+    public int getNumberOfTheaters() {
+        return theaterList.size();
+    }
+
+    /**
+     * Gets TheaterList
+     * @return List<Theater> theaterList
+     */
+    public List<Theater> getTheaterList() {
+        return theaterList;
     }
 
 }
