@@ -4,11 +4,12 @@ import static java.time.temporal.ChronoUnit.HOURS;
 import java.io.File;
 import java.io.FileNotFoundException;
 import java.io.FileReader;
+import java.io.Serializable;
 import java.time.LocalTime;
 import java.time.format.DateTimeFormatter;
 import java.util.*;
 
-public class Film {
+public class Film implements Serializable {
 
     private String name;
     private String description;

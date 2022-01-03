@@ -3,11 +3,12 @@ package cinemadispenser.operations.update;
 import java.io.File;
 import java.io.FileNotFoundException;
 import java.io.FileReader;
+import java.io.Serializable;
 import java.time.LocalTime;
 import java.time.format.DateTimeFormatter;
 import java.util.*;
 
-public class Theater {
+public class Theater implements Serializable {
 
     private int number;
     private int price;

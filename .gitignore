@@ -16,6 +16,10 @@ classes/
 
 .github/
 
-# example file
+# example folder
 
-src/cinemadispenser/example/CinemaManager.java
+src/cinemadispenser/example/
+
+# state folder
+
+src/cinemadispenser/serializable/

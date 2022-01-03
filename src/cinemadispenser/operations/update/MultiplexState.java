@@ -8,7 +8,7 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Objects;
 
-public class MultiplexState {
+public class MultiplexState implements Serializable {
 
     private final List<Theater> theaterList = new ArrayList<>();
 

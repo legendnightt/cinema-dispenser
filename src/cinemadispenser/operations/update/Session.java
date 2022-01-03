@@ -1,10 +1,11 @@
 package cinemadispenser.operations.update;
 
+import java.io.Serializable;
 import java.time.LocalTime;
 import java.util.ArrayList;
 import java.util.Set;
 
-public class Session {
+public class Session implements Serializable {
 
     private final LocalTime hour;
     ArrayList<Seat> occupiedSeatArrayList;

@@ -1,8 +1,9 @@
 package cinemadispenser.operations.update;
 
+import java.io.Serializable;
 import java.util.Objects;
 
-public class Seat {
+public class Seat implements Serializable {
 
     private boolean occupied = false;
     private final int row;
