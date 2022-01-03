@@ -61,23 +61,19 @@ public class Theater {
         Scanner sc = new Scanner(new FileReader(file));
         int row = 0;
         int col = 1;
-        System.out.println("Going to start generating seats for theater number: " + number);
         // while for getting max rows
         while (scrow.hasNextLine()) {
             scrow.nextLine();
             row += 1;
         }
         maxrows = row;
-        System.out.println("Max rows: " + maxrows);
         // while for generating seats with exact row & col
         maxcols = 1;
         while (sc.hasNextLine()) {
             String line = sc.nextLine();
-            System.out.println(line);
             for (char ch: line.toCharArray()) {
                 if (ch == '*') {
                     seatSet.add(new Seat(row, col));
-                    System.out.println("Seat added in: " + row + " row, " + col + " col");
                     if (maxcols < col) {
                         maxcols = col;
                     }
@@ -87,7 +83,6 @@ public class Theater {
             col = 1;
             row -= 1;
         }
-        System.out.println("Max col: " + maxcols);
     }
 
     /**
@@ -107,7 +102,6 @@ public class Theater {
                 if (line.startsWith("Theatre: ")) {
                     for (char ch : line.toCharArray()) {
                         if (Character.isDigit(ch) && number == Character.getNumericValue(ch)) {
-                            System.out.println("Found film for theater: " + number);
                             filmList.add(new Film(file));
                             found = true;
                         } else {
@@ -116,14 +110,10 @@ public class Theater {
                     }
                 } else if (line.startsWith("Sessions: ") && found) {
                     String sessions = line.substring(line.indexOf(":") + 1).trim();
-                    System.out.println("Sessions: " + sessions);
                     // while for getting sessions from sessions string & converts them to LocalTime format to create new Session
                     while (!sessions.isEmpty()) {
                         sessionList.add(new Session(LocalTime.parse(sessions.substring(0, 5), DateTimeFormatter.ofPattern("HH:mm")), seatSet));
                         sessions = sessions.substring(sessions.indexOf(":") + 3).trim();
-                    }
-                    for(Session session: sessionList) {
-                        System.out.println("Session: " + session.getHour());
                     }
                 }
             }
@@ -176,6 +166,14 @@ public class Theater {
      */
     public List<Film> getFilmList() {
         return filmList;
+    }
+
+    /**
+     * Gets List<Session> sessionList
+     * @return List<Session> sessionList
+     */
+    public List<Session> getSessionList() {
+        return sessionList;
     }
 
 }

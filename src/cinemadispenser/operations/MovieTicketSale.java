@@ -5,18 +5,27 @@ import sienens.CinemaTicketDispenser;
 import urjc.UrjcBankServer;
 
 import java.io.FileNotFoundException;
-import java.text.ParseException;
 import java.util.Date;
 import java.util.Timer;
 import java.util.TimerTask;
 
 public class MovieTicketSale {
 
+    /**
+     * MovieTicketSale builder
+     * @param dispenser CinemaTicketDispenser dispenser
+     * @param bank UrjcBankServer bank
+     */
     public MovieTicketSale(CinemaTicketDispenser dispenser, UrjcBankServer bank) {
         PerformPayment payment = new PerformPayment(bank);
-        this.update(dispenser, bank);
+        update(dispenser, bank);
     }
 
+    /**
+     * Updates every 24h all /update
+     * @param dispenser CinemaTicketDispenser dispenser
+     * @param bank UrjcBankServer bank
+     */
     private void update(CinemaTicketDispenser dispenser, UrjcBankServer bank) {
         Date date = new Date();
         Timer timer = new Timer();
@@ -30,7 +39,6 @@ public class MovieTicketSale {
                 }
             }
         }, date, 24*60*60*1000);
-
     }
 
 }

@@ -23,29 +23,23 @@ public class Film {
      */
     public Film(File file) throws FileNotFoundException {
         Scanner sc = new Scanner(new FileReader(file));
-        System.out.println("Going to start generating a film:");
         // while for getting movie config stuff
         while (sc.hasNextLine()) {
             String line = sc.nextLine();
             if (line.startsWith("Title: ")) {
                 name = cleanLine(line);
-                System.out.println("Title: " + name);
             } else if (line.startsWith("Description: ")) {
                 description = cleanLine(line);
-                System.out.println("Description: " + description);
             } else if (line.startsWith("Sessions: ")) {
                 String sessions = cleanLine(line);
-                System.out.println("Sessions: " + sessions);
                 duration = (int) HOURS.between(
                         // first session
                         LocalTime.parse(sessions.substring(0, 5), DateTimeFormatter.ofPattern("HH:mm")),
                         // second session
                         LocalTime.parse(sessions.substring(6, 11), DateTimeFormatter.ofPattern("HH:mm"))
                 );
-                System.out.println("Duration: " + duration + "h");
             } else if (line.startsWith("Poster: ")) {
                 poster = new File("./src/resources/movies/images/" + cleanLine(line));
-                System.out.println("Poster: " + poster);
             } else if (line.startsWith("Price: ")) {
                 for (char ch : line.toCharArray()) {
                     if (Character.isDigit(ch)) {
