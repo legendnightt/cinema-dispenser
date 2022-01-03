@@ -17,6 +17,12 @@ public class Theater {
     private final List<Film> filmList = new ArrayList<>();
     private final List<Session> sessionList = new ArrayList<>();
 
+    /**
+     * Theater builder
+     * @param theaterFile File theaterFile
+     * @param moviesFiles File moviesFiles
+     * @throws FileNotFoundException if theaterFile or moviesFiles doesn't exist
+     */
     public Theater(File theaterFile, File[] moviesFiles) throws FileNotFoundException {
         setNumber(theaterFile);
         setPrice();
@@ -26,7 +32,7 @@ public class Theater {
 
     /**
      * Sets theater number, searching the corresponding one in the txt file
-     * @param file theaterFile
+     * @param file File theaterFile
      */
     private void setNumber(File file) {
         for (char ch: file.toString().toCharArray()) {
@@ -47,7 +53,7 @@ public class Theater {
 
     /**
      * Creates Seat Set with theaterFile directory, also maxrows & maxcols
-     * @param file theaterFile
+     * @param file File theaterFile
      * @throws FileNotFoundException if theaterFile doesn't exist
      */
     private void generateSeatSet(File file) throws FileNotFoundException {
@@ -87,7 +93,7 @@ public class Theater {
     /**
      * Creates corresponding films to Theater & adds them into filmList,
      * same with sessions with sessionList
-     * @param files moviesFiles
+     * @param files File moviesFiles
      * @throws FileNotFoundException if moviesFiles doesn't exist
      */
     private void generateFilmSessionList (File[] files) throws FileNotFoundException {
@@ -95,6 +101,7 @@ public class Theater {
             Scanner sc = new Scanner(new FileReader(file));
             // while for searching theater films
             boolean found = false;
+            // while for getting Theatre Films & Sessions
             while (sc.hasNextLine()) {
                 String line = sc.nextLine();
                 if (line.startsWith("Theatre: ")) {
@@ -123,26 +130,50 @@ public class Theater {
         }
     }
 
+    /**
+     * Gets int number
+     * @return int number
+     */
     public int getNumber() {
         return number;
     }
 
+    /**
+     * Gets int price
+     * @return int price
+     */
     public int getPrice() {
         return price;
     }
 
+    /**
+     * Gets int maxrows
+     * @return int maxrows
+     */
     public int getMaxRows() {
         return maxrows;
     }
 
+    /**
+     * Gets max columns
+     * @return int maxcols
+     */
     public int getMaxCols() {
         return maxcols;
     }
 
+    /**
+     * Gets Set<Seat> seatSet
+     * @return Set<Seat> seatSet
+     */
     public Set<Seat> getSeatSeat() {
         return seatSet;
     }
 
+    /**
+     * Gets List<Film> filmList
+     * @return List<Film> filmList
+     */
     public List<Film> getFilmList() {
         return filmList;
     }

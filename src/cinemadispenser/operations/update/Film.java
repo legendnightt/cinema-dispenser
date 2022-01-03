@@ -12,19 +12,16 @@ public class Film {
 
     private String name;
     private String description;
-    private final List<LocalTime> sessionList = new ArrayList<>();
     private int duration;
+    private int price;
     private File poster;
 
+    /**
+     * Film builder
+     * @param file movieFile
+     * @throws FileNotFoundException if movieFile doesn't exist
+     */
     public Film(File file) throws FileNotFoundException {
-        setInfo(file);
-    }
-
-    private String cleanLine(String line) {
-        return line.substring(line.indexOf(":") + 1).trim();
-    }
-
-    private void setInfo(File file) throws FileNotFoundException {
         Scanner sc = new Scanner(new FileReader(file));
         System.out.println("Going to start generating a film:");
         // while for getting movie config stuff
@@ -39,39 +36,73 @@ public class Film {
             } else if (line.startsWith("Sessions: ")) {
                 String sessions = cleanLine(line);
                 System.out.println("Sessions: " + sessions);
-                // while for getting sessions from sessions string & converts them to LocalTime format inside sessionList
-                while (!sessions.isEmpty()) {
-                    sessionList.add(LocalTime.parse(sessions.substring(0, 5), DateTimeFormatter.ofPattern("HH:mm")));
-                    sessions = sessions.substring(sessions.indexOf(":") + 3).trim();
-                }
-                System.out.println(sessionList);
-                duration = (int) HOURS.between(sessionList.get(0), sessionList.get(1));
+                duration = (int) HOURS.between(
+                        // first session
+                        LocalTime.parse(sessions.substring(0, 5), DateTimeFormatter.ofPattern("HH:mm")),
+                        // second session
+                        LocalTime.parse(sessions.substring(6, 11), DateTimeFormatter.ofPattern("HH:mm"))
+                );
                 System.out.println("Duration: " + duration + "h");
             } else if (line.startsWith("Poster: ")) {
                 poster = new File("./src/resources/movies/images/" + cleanLine(line));
                 System.out.println("Poster: " + poster);
+            } else if (line.startsWith("Price: ")) {
+                for (char ch : line.toCharArray()) {
+                    if (Character.isDigit(ch)) {
+                        price = Character.getNumericValue(ch);
+                    }
+                }
             }
         }
     }
 
+    /**
+     * Cleans line until : & clears space after :
+     * @param line String
+     * @return String cleaned line
+     */
+    private String cleanLine(String line) {
+        return line.substring(line.indexOf(":") + 1).trim();
+    }
+
+    /**
+     * Gets String name
+     * @return String name
+     */
     public String getName() {
         return name;
     }
 
+    /**
+     * Gets String description
+     * @return String description
+     */
     public String getDescription() {
         return description;
     }
 
-    public File getPoster() {
-        return poster;
-    }
-
-    public List<LocalTime> getSessionList() {
-        return sessionList;
-    }
-
+    /**
+     * Gets int duration
+     * @return int duration
+     */
     public int getDuration() {
         return duration;
+    }
+
+    /**
+     * Gets int price
+     * @return int price
+     */
+    public int getPrice() {
+        return price;
+    }
+
+    /**
+     * Gets File poster
+     * @return File poster
+     */
+    public File getPoster() {
+        return poster;
     }
 
 }

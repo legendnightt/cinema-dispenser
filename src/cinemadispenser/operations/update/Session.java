@@ -9,6 +9,11 @@ public class Session {
     private final LocalTime hour;
     ArrayList<Seat> occupiedSeatArrayList;
 
+    /**
+     * Session builder
+     * @param hour LocalTime hour
+     * @param seatSet Set<Seat> seatSet
+     */
     public Session(LocalTime hour, Set<Seat> seatSet) {
         this.hour = hour;
         occupiedSeatArrayList = new ArrayList<>(seatSet);
@@ -16,8 +21,8 @@ public class Session {
 
     /**
      * Checks if a specific Seat is occupied
-     * @param row Seat row
-     * @param col Seat column
+     * @param row Seat int row
+     * @param col Seat int column
      * @return boolean, if Seat is occupied true, else false
      */
     public boolean isOccupied(int row, int col) {
@@ -27,8 +32,8 @@ public class Session {
 
     /**
      * Occupies a seat setting occupied to true
-     * @param row Seat row
-     * @param col Seat column
+     * @param row Seat int row
+     * @param col Seat int column
      */
     public void ocuppiesSeat(int row, int col) {
         // uses index of new Seat(row, col) Object, for getting Seat Object inside occupiedSeatArrayList & sets occupied
@@ -37,14 +42,18 @@ public class Session {
 
     /**
      * UnOccupies a seat setting occupied to false
-     * @param row Seat row
-     * @param col Seat column
+     * @param row Seat int row
+     * @param col Seat int column
      */
     public void unocuppiesSeat(int row, int col) {
         // uses index of new Seat(row, col) Object, for getting Seat Object inside occupiedSeatArrayList & sets unoccupied
         occupiedSeatArrayList.get(occupiedSeatArrayList.indexOf(new Seat(row, col))).setOccupied(false);
     }
 
+    /**
+     * Gets LocalTime hour
+     * @return LocalTime hour
+     */
     public LocalTime getHour() {
         return hour;
     }
