@@ -22,4 +22,4 @@ src/cinemadispenser/example/
 
 # state folder
 
-src/cinemadispenser/serializable/
+src/cinemadispenser/state/serializable/

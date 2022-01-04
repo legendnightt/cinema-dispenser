@@ -1,6 +1,6 @@
 package cinemadispenser.operations;
 
-import cinemadispenser.operations.update.MultiplexState;
+import cinemadispenser.state.MultiplexState;
 import sienens.CinemaTicketDispenser;
 import urjc.UrjcBankServer;
 
@@ -35,7 +35,7 @@ public class MovieTicketSale {
      * @param bank UrjcBankServer bank
      */
     private void update(CinemaTicketDispenser dispenser, UrjcBankServer bank) {
-        String serializableDirectory = "./src/cinemadispenser/serializable";
+        String serializableDirectory = "./src/cinemadispenser/state/serializable";
         String serializablePath = serializableDirectory + "/state.bin";
         try {
             File directory = new File(serializableDirectory);

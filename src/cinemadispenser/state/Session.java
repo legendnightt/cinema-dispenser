@@ -1,4 +1,4 @@
-package cinemadispenser.operations.update;
+package cinemadispenser.state;
 
 import java.io.Serializable;
 import java.time.LocalTime;

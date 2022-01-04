@@ -1,4 +1,4 @@
-package cinemadispenser.operations.update;
+package cinemadispenser.state;
 
 import sienens.CinemaTicketDispenser;
 import urjc.UrjcBankServer;
