@@ -49,10 +49,11 @@ public class MovieTicketSale {
                 // state.bin FileTime
                 BasicFileAttributes attr = Files.readAttributes(Path.of(serializablePath), BasicFileAttributes.class);
                 // converts FileTime into LocalDateTime
-                LocalDateTime convertedFileTime = LocalDateTime.ofInstant(attr.creationTime().toInstant(), ZoneId.systemDefault());
+                LocalDateTime convertedFileTime = LocalDateTime.ofInstant(attr.lastModifiedTime().toInstant(), ZoneId.systemDefault());
                 // if state.bin exists & is not created in the same day, new MultiplexState & it creates again
                 if (ChronoUnit.DAYS.between(convertedFileTime, now) != 0) {
                     generateState(dispenser, bank, serializablePath);
+                    System.out.println("Old State so, new state generated and serialized successfully!");
                 } else {
                     ObjectInputStream in = new ObjectInputStream(new FileInputStream(serializablePath));
                     state = (MultiplexState) in.readObject();
@@ -60,6 +61,7 @@ public class MovieTicketSale {
                 }
             } else {
                 generateState(dispenser, bank, serializablePath);
+                System.out.println("No state.bin file so, New state generated and serialized successfully!");
             }
         } catch (IOException | ClassNotFoundException e) {
             e.printStackTrace();
@@ -89,7 +91,6 @@ public class MovieTicketSale {
         out.writeObject(state);
         out.flush();
         out.close();
-        System.out.println("New state generated and serialized successfully!");
     }
 
 }
