@@ -14,11 +14,9 @@ public class MultiplexState implements Serializable {
 
     /**
      * MultiplexState builder
-     * @param dispenser CinemaTicketDispenser dispenser
-     * @param bank UrjcBankServer bank
      * @throws FileNotFoundException  if theaterFile or moviesFiles doesn't exist
      */
-    public MultiplexState(CinemaTicketDispenser dispenser, UrjcBankServer bank) throws FileNotFoundException {
+    public MultiplexState() throws FileNotFoundException {
         File moviesDir = new File("./src/resources/movies/txt/");
         File theatersDir = new File("./src/resources/theaters/");
         // searches theatres in path & adds movie list path
@@ -42,7 +40,7 @@ public class MultiplexState implements Serializable {
      * @param number int number
      * @return Theater theater
      */
-    public Theater getTheater(int number) throws Exception {
+    public Theater getTheater(int number) {
         for (Theater theater: theaterList) {
             if (number == theater.getNumber()) {
                 return theater;

@@ -1,8 +1,9 @@
 package cinemadispenser.operations;
 
+import cinemadispenser.Multiplex;
+import cinemadispenser.Operation;
 import cinemadispenser.state.MultiplexState;
 import sienens.CinemaTicketDispenser;
-import urjc.UrjcBankServer;
 
 import java.time.temporal.ChronoUnit;
 import java.io.*;
@@ -11,30 +12,18 @@ import java.nio.file.Path;
 import java.nio.file.attribute.BasicFileAttributes;
 import java.time.LocalDateTime;
 import java.time.ZoneId;
-import java.util.Date;
-import java.util.Timer;
-import java.util.TimerTask;
 
-public class MovieTicketSale {
+public class MovieTicketSale extends Operation {
 
     private MultiplexState state;
 
     /**
      * MovieTicketSale builder
      * @param dispenser CinemaTicketDispenser dispenser
-     * @param bank UrjcBankServer bank
+     * @param multiplex Multiplex multiplex
      */
-    public MovieTicketSale(CinemaTicketDispenser dispenser, UrjcBankServer bank) {
-        PerformPayment payment = new PerformPayment(bank);
-        update(dispenser, bank);
-    }
-
-    /**
-     * Updates every 24h /update
-     * @param dispenser CinemaTicketDispenser dispenser
-     * @param bank UrjcBankServer bank
-     */
-    private void update(CinemaTicketDispenser dispenser, UrjcBankServer bank) {
+    public MovieTicketSale(CinemaTicketDispenser dispenser, Multiplex multiplex) {
+        super(dispenser, multiplex);
         String serializableDirectory = "./src/cinemadispenser/state/serializable";
         String serializablePath = serializableDirectory + "/state.bin";
         try {
@@ -52,7 +41,7 @@ public class MovieTicketSale {
                 LocalDateTime convertedFileTime = LocalDateTime.ofInstant(attr.lastModifiedTime().toInstant(), ZoneId.systemDefault());
                 // if state.bin exists & is not created in the same day, new MultiplexState & it creates again
                 if (ChronoUnit.DAYS.between(convertedFileTime, now) != 0) {
-                    generateState(dispenser, bank, serializablePath);
+                    generateState(serializablePath);
                     System.out.println("Old State so, new state generated and serialized successfully!");
                 } else {
                     ObjectInputStream in = new ObjectInputStream(new FileInputStream(serializablePath));
@@ -60,37 +49,42 @@ public class MovieTicketSale {
                     System.out.println("New state created from state.bin successfully!");
                 }
             } else {
-                generateState(dispenser, bank, serializablePath);
+                generateState(serializablePath);
                 System.out.println("No state.bin file so, New state generated and serialized successfully!");
             }
         } catch (IOException | ClassNotFoundException e) {
             e.printStackTrace();
         }
-        /* Timer
-        Date date = new Date();
-        Timer timer = new Timer();
-        // timer since program starts until 24h after
-        timer.schedule(new TimerTask() {
-            public void run() {
-
-            }
-        }, date, 24*60*60*1000);
-         */
     }
 
     /**
      * Generates state & state.bin
-     * @param dispenser CinemaTicketDispenser dispenser
-     * @param bank UrjcBankServer bank
      * @param serializablePath String serializablePath
      * @throws IOException if something fails inside
      */
-    private void generateState(CinemaTicketDispenser dispenser, UrjcBankServer bank, String serializablePath) throws IOException {
-        state = new MultiplexState(dispenser, bank);
+    private void generateState(String serializablePath) throws IOException {
+        state = new MultiplexState();
         ObjectOutputStream out = new ObjectOutputStream(new FileOutputStream(serializablePath));
         out.writeObject(state);
         out.flush();
         out.close();
+    }
+
+    /**
+     * Does the operation needed in this case
+     */
+    @Override
+    public void doOperation() {
+
+    }
+
+    /**
+     * Gets the proper Title in this case
+     * @return String title
+     */
+    @Override
+    public String getTitle() {
+        return "MovieTicketSale";
     }
 
 }

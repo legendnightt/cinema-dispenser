@@ -19,7 +19,7 @@ public class Multiplex {
     public void start() {
         CinemaTicketDispenser dispenser = new CinemaTicketDispenser();
         UrjcBankServer bank = new UrjcBankServer();
-        MainMenu menu = new MainMenu(dispenser, bank);
+        MainMenu menu = new MainMenu(dispenser, this);
         File idiomsDir = new File("./src/resources/idioms/");
         // searches for idioms and collect them into HashSet<String> idiomHashSet
         for (File idiomFile: Objects.requireNonNull(idiomsDir.listFiles())) {
@@ -27,6 +27,11 @@ public class Multiplex {
             final String headclear = idiomFile.toString().substring(idiomFile.toString().indexOf("_") + 1).trim();
             // idiom.properties -> idiom
             idiomHashSet.add(headclear.substring(0, headclear.length() - 11));
+        }
+        for (Operation operation: menu.operationList) {
+            if (Objects.equals(operation.getTitle(), "MainMenu")) {
+                menu.operationList.get(0).doOperation();
+            }
         }
     }
 
