@@ -5,15 +5,24 @@ import java.time.LocalTime;
 import java.util.ArrayList;
 import java.util.Set;
 
+/**
+ * Session class implements Serializable
+ */
 public class Session implements Serializable {
 
+    /**
+     * Session hour
+     */
     private final LocalTime hour;
+    /**
+     * Session Seat status ArrayList
+     */
     ArrayList<Seat> occupiedSeatArrayList;
 
     /**
      * Session builder
      * @param hour LocalTime hour
-     * @param seatSet Set<Seat> seatSet
+     * @param seatSet Set seatSet
      */
     public Session(LocalTime hour, Set<Seat> seatSet) {
         this.hour = hour;

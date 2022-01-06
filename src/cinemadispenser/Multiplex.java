@@ -8,13 +8,22 @@ import java.io.File;
 import java.util.HashSet;
 import java.util.Objects;
 
+/**
+ * Multiplex class
+ */
 public class Multiplex {
 
+    /**
+     * Idioms String HashSet
+     */
     private final HashSet<String> idiomHashSet = new HashSet<>();
+    /**
+     * Current Idiom working
+     */
     private String idiom;
 
     /**
-     * Starts all & have main loop of the application
+     * Starts all, and have main loop of the application
      */
     public void start() {
         CinemaTicketDispenser dispenser = new CinemaTicketDispenser();
@@ -41,7 +50,7 @@ public class Multiplex {
     }
 
     /**
-     * Sets idiom if exists in HashSet<String> idiomHashSet
+     * Sets idiom if exists in HashSet idiomHashSet
      * @param idiom String idiom
      */
     public void setIdiom(String idiom) {
@@ -51,8 +60,8 @@ public class Multiplex {
     }
 
     /**
-     * Gets HashSet<String> idiomHashSet
-     * @return HashSet<String> idiomHashSet
+     * Gets HashSet idiomHashSet
+     * @return HashSet idiomHashSet
      */
     public HashSet<String> getIdiomHashSet() {
         return idiomHashSet;

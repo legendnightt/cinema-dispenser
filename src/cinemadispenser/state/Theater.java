@@ -8,14 +8,38 @@ import java.time.LocalTime;
 import java.time.format.DateTimeFormatter;
 import java.util.*;
 
+/**
+ * Theater class implements Serializable
+ */
 public class Theater implements Serializable {
 
+    /**
+     * Theater number
+     */
     private int number;
+    /**
+     * Theater price
+     */
     private int price;
+    /**
+     * Theater max rows
+     */
     private int maxrows;
+    /**
+     * Theater max columns
+     */
     private int maxcols;
+    /**
+     * Theater Seat Set
+     */
     private final Set<Seat> seatSet = new HashSet<>();
+    /**
+     * Theater Film List
+     */
     private final List<Film> filmList = new ArrayList<>();
+    /**
+     * Theater Session List
+     */
     private final List<Session> sessionList = new ArrayList<>();
 
     /**
@@ -154,24 +178,24 @@ public class Theater implements Serializable {
     }
 
     /**
-     * Gets Set<Seat> seatSet
-     * @return Set<Seat> seatSet
+     * Gets Set seatSet
+     * @return Set seatSet
      */
     public Set<Seat> getSeatSeat() {
         return seatSet;
     }
 
     /**
-     * Gets List<Film> filmList
-     * @return List<Film> filmList
+     * Gets List filmList
+     * @return List filmList
      */
     public List<Film> getFilmList() {
         return filmList;
     }
 
     /**
-     * Gets List<Session> sessionList
-     * @return List<Session> sessionList
+     * Gets List sessionList
+     * @return List sessionList
      */
     public List<Session> getSessionList() {
         return sessionList;

@@ -9,12 +9,30 @@ import java.time.LocalTime;
 import java.time.format.DateTimeFormatter;
 import java.util.*;
 
+/**
+ * Film class implements Serializable
+ */
 public class Film implements Serializable {
 
+    /**
+     * Film name
+     */
     private String name;
+    /**
+     * Film description
+     */
     private String description;
+    /**
+     * Film duration
+     */
     private int duration;
+    /**
+     * Film price
+     */
     private int price;
+    /**
+     * Film poster path
+     */
     private File poster;
 
     /**
@@ -52,7 +70,7 @@ public class Film implements Serializable {
     }
 
     /**
-     * Cleans line until : & clears space after :
+     * Cleans line until : and clears space after :
      * @param line String
      * @return String cleaned line
      */

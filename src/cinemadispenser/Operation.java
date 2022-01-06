@@ -2,13 +2,13 @@ package cinemadispenser;
 
 import sienens.CinemaTicketDispenser;
 
+/**
+ * Operation abstract class
+ */
 public abstract class Operation {
 
     private final CinemaTicketDispenser dispenser;
     private final Multiplex multiplex;
-
-    public abstract void doOperation();
-    public abstract String getTitle();
 
     /**
      * Operation builder
@@ -19,6 +19,17 @@ public abstract class Operation {
         this.dispenser = dispenser;
         this.multiplex = multiplex;
     }
+
+    /**
+     * Does the operation needed
+     */
+    public abstract void doOperation();
+
+    /**
+     * Gets operation title
+     * @return String title
+     */
+    public abstract String getTitle();
 
     /**
      * Gets CinemaTicketDispenser dispenser

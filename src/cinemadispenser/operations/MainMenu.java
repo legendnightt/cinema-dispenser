@@ -8,10 +8,18 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Objects;
 
+/**
+ * MainMenu class extends Operation
+ */
 public class MainMenu extends Operation {
 
     private final List<Operation> operationList = new ArrayList<>();
 
+    /**
+     * MainMenu builder
+     * @param dispenser CinemaTicketDispenser dispenser
+     * @param multiplex Multiplex multiplex
+     */
     public MainMenu(CinemaTicketDispenser dispenser, Multiplex multiplex) {
         super(dispenser, multiplex);
         // adding operations
@@ -22,8 +30,8 @@ public class MainMenu extends Operation {
     }
 
     /**
-     * Gets List<Operation> operationList
-     * @return List<Operation> operationList
+     * Gets List operationList
+     * @return List operationList
      */
     public List<Operation> getOperationList() {
         return operationList;

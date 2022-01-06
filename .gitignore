@@ -22,7 +22,7 @@ nbdist/
 
 # example folder
 
-src/cinemadispenser/example/
+example/
 
 # state folder
 

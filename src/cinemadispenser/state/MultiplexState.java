@@ -1,15 +1,18 @@
 package cinemadispenser.state;
 
-import sienens.CinemaTicketDispenser;
-import urjc.UrjcBankServer;
-
 import java.io.*;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Objects;
 
+/**
+ * MultiplexState class implements Serializable
+ */
 public class MultiplexState implements Serializable {
 
+    /**
+     * Theater List
+     */
     private final List<Theater> theaterList = new ArrayList<>();
 
     /**
@@ -58,8 +61,8 @@ public class MultiplexState implements Serializable {
     }
 
     /**
-     * Gets TheaterList
-     * @return List<Theater> theaterList
+     * Gets List TheaterList
+     * @return List theaterList
      */
     public List<Theater> getTheaterList() {
         return theaterList;

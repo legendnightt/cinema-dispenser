@@ -3,10 +3,22 @@ package cinemadispenser.state;
 import java.io.Serializable;
 import java.util.Objects;
 
+/**
+ * Seat class implements Serializable
+ */
 public class Seat implements Serializable {
 
+    /**
+     * Seat status
+     */
     private boolean occupied = false;
+    /**
+     * Seat row
+     */
     private final int row;
+    /**
+     * Seat column
+     */
     private final int col;
 
     /**
@@ -20,7 +32,7 @@ public class Seat implements Serializable {
     }
 
     /**
-     * Checks if provided Object has same seats & columns
+     * Checks if provided Object has same seats and columns
      * @param o Object o
      * @return boolean
      */

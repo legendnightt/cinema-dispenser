@@ -4,8 +4,16 @@ import cinemadispenser.Multiplex;
 import cinemadispenser.Operation;
 import sienens.CinemaTicketDispenser;
 
+/**
+ * PerformPayment class extends Operation
+ */
 public class PerformPayment extends Operation {
 
+    /**
+     * PerformPayment builder
+     * @param dispenser CinemaTicketDispenser dispenser
+     * @param multiplex Multiplex multiplex
+     */
     public PerformPayment(CinemaTicketDispenser dispenser, Multiplex multiplex) {
         super(dispenser, multiplex);
     }

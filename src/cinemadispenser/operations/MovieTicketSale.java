@@ -13,6 +13,9 @@ import java.nio.file.attribute.BasicFileAttributes;
 import java.time.LocalDateTime;
 import java.time.ZoneId;
 
+/**
+ * MovieTicketSale class extends Operation
+ */
 public class MovieTicketSale extends Operation {
 
     private MultiplexState state;
