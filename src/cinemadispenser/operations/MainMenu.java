@@ -6,10 +6,11 @@ import sienens.CinemaTicketDispenser;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Objects;
 
 public class MainMenu extends Operation {
 
-    public List<Operation> operationList = new ArrayList<>();
+    private final List<Operation> operationList = new ArrayList<>();
 
     public MainMenu(CinemaTicketDispenser dispenser, Multiplex multiplex) {
         super(dispenser, multiplex);
@@ -21,16 +22,42 @@ public class MainMenu extends Operation {
     }
 
     /**
+     * Gets List<Operation> operationList
+     * @return List<Operation> operationList
+     */
+    public List<Operation> getOperationList() {
+        return operationList;
+    }
+
+    /**
      * Does the operation needed in this case
      */
     @Override
     public void doOperation() {
-        super.getDispenser().setMenuMode();
-        super.getDispenser().setTitle(getTitle());
+        super.getDispenser().setMessageMode();
+        super.getDispenser().setTitle("Welcome to Cinema Dispenser");
+        super.getDispenser().setDescription("Select the Operation you want to make");
+        super.getDispenser().setOption(0, "Buy Film Tickets");
+        super.getDispenser().setOption(1, "Change Language");
+        // wait until 30s, goes back to Multiplex & resets language
+        char option = super.getDispenser().waitEvent(30);
+        if (option == 'A') {
+            for (Operation operation: operationList) {
+                if (Objects.equals(operation.getTitle(), "MovieTicketSale")) {
+                    operation.doOperation();
+                }
+            }
+        } else if (option == 'B') {
+            for (Operation operation: operationList) {
+                if (Objects.equals(operation.getTitle(), "IdiomSelection")) {
+                    operation.doOperation();
+                }
+            }
+        }
     }
 
     /**
-     * Gets the proper Title in this case
+     * Gets the proper title in this case
      * @return String title
      */
     @Override

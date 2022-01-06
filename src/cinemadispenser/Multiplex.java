@@ -26,11 +26,16 @@ public class Multiplex {
             // cinemadispenser_idiom.properties -> idiom.properties
             final String headclear = idiomFile.toString().substring(idiomFile.toString().indexOf("_") + 1).trim();
             // idiom.properties -> idiom
-            idiomHashSet.add(headclear.substring(0, headclear.length() - 11));
+            this.idiomHashSet.add(headclear.substring(0, headclear.length() - 11));
         }
-        for (Operation operation: menu.operationList) {
-            if (Objects.equals(operation.getTitle(), "MainMenu")) {
-                menu.operationList.get(0).doOperation();
+        // main loop
+        while (true) {
+            // sets default language
+            this.setIdiom("en");
+            for (Operation operation: menu.getOperationList()) {
+                if (Objects.equals(operation.getTitle(), "MainMenu")) {
+                    operation.doOperation();
+                }
             }
         }
     }
@@ -38,14 +43,11 @@ public class Multiplex {
     /**
      * Sets idiom if exists in HashSet<String> idiomHashSet
      * @param idiom String idiom
-     * @return boolean, true if idiom exists in HashSet<String> idiomHashSet, false if it doesn't
      */
-    public boolean setIdiom(String idiom) {
+    public void setIdiom(String idiom) {
         if (idiomHashSet.contains(idiom)) {
             this.idiom = idiom;
-            return true;
         }
-        return false;
     }
 
     /**

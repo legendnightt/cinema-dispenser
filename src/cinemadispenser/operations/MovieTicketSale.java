@@ -79,7 +79,7 @@ public class MovieTicketSale extends Operation {
     }
 
     /**
-     * Gets the proper Title in this case
+     * Gets the proper title in this case
      * @return String title
      */
     @Override
