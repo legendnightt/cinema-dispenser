@@ -1,9 +1,7 @@
-# gradle
+# ant
 
-.gradle/
 build/
 out/
-classes/
 
 # idea
 
@@ -11,6 +9,16 @@ classes/
 *.iml
 *.ipr
 *.iws
+
+# netbeans
+
+**/nbproject/private/
+**/nbproject/Makefile-*.mk
+**/nbproject/Package-*.bash
+nbbuild/
+dist/
+nbdist/
+.nb-gradle/
 
 # .github
 
