@@ -5,6 +5,7 @@ import sienens.CinemaTicketDispenser;
 import urjc.UrjcBankServer;
 
 import java.io.File;
+import java.io.IOException;
 import java.util.HashSet;
 import java.util.Objects;
 
@@ -24,8 +25,10 @@ public class Multiplex {
 
     /**
      * Starts all, and have main loop of the application
+     * @throws IOException IO exception
+     * @throws ClassNotFoundException Class not found
      */
-    public void start() {
+    public void start() throws IOException, ClassNotFoundException {
         CinemaTicketDispenser dispenser = new CinemaTicketDispenser();
         UrjcBankServer bank = new UrjcBankServer();
         MainMenu menu = new MainMenu(dispenser, this);

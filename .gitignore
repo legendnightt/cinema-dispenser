@@ -26,4 +26,4 @@ example/
 
 # state folder
 
-src/cinemadispenser/state/serializable/
+src/resources/serializable/

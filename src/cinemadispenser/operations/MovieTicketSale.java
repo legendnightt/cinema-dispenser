@@ -12,51 +12,55 @@ import java.nio.file.Path;
 import java.nio.file.attribute.BasicFileAttributes;
 import java.time.LocalDateTime;
 import java.time.ZoneId;
+import java.util.Objects;
 
 /**
  * MovieTicketSale class extends Operation
  */
 public class MovieTicketSale extends Operation {
 
+    /**
+     * MultiplexState state
+     */
     private MultiplexState state;
 
     /**
      * MovieTicketSale builder
      * @param dispenser CinemaTicketDispenser dispenser
      * @param multiplex Multiplex multiplex
+     * @throws IOException IO exception
+     * @throws ClassNotFoundException Class not found
      */
-    public MovieTicketSale(CinemaTicketDispenser dispenser, Multiplex multiplex) {
+    public MovieTicketSale(CinemaTicketDispenser dispenser, Multiplex multiplex) throws IOException, ClassNotFoundException {
         super(dispenser, multiplex);
-        String serializableDirectory = "./src/cinemadispenser/state/serializable";
+        String serializableDirectory = "./src/resources/serializable";
         String serializablePath = serializableDirectory + "/state.bin";
-        try {
-            File directory = new File(serializableDirectory);
-            // creates /serializable directory if it doesn't exist
-            if (!directory.exists()) {
-                directory.mkdir();
+        File directory = new File(serializableDirectory);
+        // creates /serializable directory if it doesn't exist
+        if (!directory.exists()) {
+            if (directory.mkdir()) {
+                System.out.println("No state directory so, created successfully!");
             }
-            File file = new File(serializablePath);
-            if (file.exists()) {
-                LocalDateTime now = LocalDateTime.now();
-                // state.bin FileTime
-                BasicFileAttributes attr = Files.readAttributes(Path.of(serializablePath), BasicFileAttributes.class);
-                // converts FileTime into LocalDateTime
-                LocalDateTime convertedFileTime = LocalDateTime.ofInstant(attr.lastModifiedTime().toInstant(), ZoneId.systemDefault());
-                // if state.bin exists & is not created in the same day, new MultiplexState & it creates again
-                if (ChronoUnit.DAYS.between(convertedFileTime, now) != 0) {
-                    generateState(serializablePath);
-                    System.out.println("Old State so, new state generated and serialized successfully!");
-                } else {
-                    ObjectInputStream in = new ObjectInputStream(new FileInputStream(serializablePath));
-                    state = (MultiplexState) in.readObject();
-                    System.out.println("New state created from state.bin successfully!");
-                }
-            } else {
+        }
+        File file = new File(serializablePath);
+        if (file.exists()) {
+            LocalDateTime now = LocalDateTime.now();
+            // state.bin FileTime
+            BasicFileAttributes attr = Files.readAttributes(Path.of(serializablePath), BasicFileAttributes.class);
+            // converts FileTime into LocalDateTime
+            LocalDateTime convertedFileTime = LocalDateTime.ofInstant(attr.lastModifiedTime().toInstant(), ZoneId.systemDefault());
+            // if state.bin exists & is not created in the same day, new MultiplexState & it creates again
+            if (ChronoUnit.DAYS.between(convertedFileTime, now) != 0) {
                 generateState(serializablePath);
-                System.out.println("No state.bin file so, New state generated and serialized successfully!");
+                System.out.println("Old State so, new state generated and serialized successfully!");
+            } else {
+                ObjectInputStream in = new ObjectInputStream(new FileInputStream(serializablePath));
+                state = (MultiplexState) in.readObject();
+                System.out.println("New state created from state.bin successfully!");
             }
-        } catch (IOException | ClassNotFoundException e) {
-            e.printStackTrace();
+        } else {
+            generateState(serializablePath);
+            System.out.println("No state.bin file so, New state generated and serialized successfully!");
         }
     }
 

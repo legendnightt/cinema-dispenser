@@ -7,7 +7,13 @@ import sienens.CinemaTicketDispenser;
  */
 public abstract class Operation {
 
+    /**
+     * CinemaTicketDispenser dispenser
+     */
     private final CinemaTicketDispenser dispenser;
+    /**
+     * Multiplex multiplex
+     */
     private final Multiplex multiplex;
 
     /**
