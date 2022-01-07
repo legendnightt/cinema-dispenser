@@ -2,7 +2,9 @@ package cinemadispenser.operations;
 
 import cinemadispenser.Multiplex;
 import cinemadispenser.Operation;
+import cinemadispenser.state.Film;
 import cinemadispenser.state.MultiplexState;
+import cinemadispenser.state.Theater;
 import sienens.CinemaTicketDispenser;
 
 import java.time.temporal.ChronoUnit;
@@ -12,7 +14,7 @@ import java.nio.file.Path;
 import java.nio.file.attribute.BasicFileAttributes;
 import java.time.LocalDateTime;
 import java.time.ZoneId;
-import java.util.Objects;
+import java.util.ArrayList;
 
 /**
  * MovieTicketSale class extends Operation
@@ -82,7 +84,70 @@ public class MovieTicketSale extends Operation {
      */
     @Override
     public void doOperation() {
+        super.getDispenser().setMenuMode();
+        // more accessible Films
+        ArrayList<Film> totalFilmArrayList = new ArrayList<>();
+        for (Theater theater : this.state.getTheaterList()) {
+            totalFilmArrayList.addAll(theater.getFilmList());
+        }
+        super.getDispenser().setOption(2, "Next Film");
+        super.getDispenser().setOption(3, "Previous Film");
+        super.getDispenser().setOption(4, "Continue");
+        super.getDispenser().setOption(5, "Exit");
+        // displays first film
+        displayFilmInfo(0, totalFilmArrayList);
+        int filmCont = 0;
+        char option = super.getDispenser().waitEvent(5);
+        // if time is over, goes back to main loop & MainMenu
+        while ((int) option != 0) {
+            System.out.println(filmCont);
+            switch (option) {
+                // Next Film
+                case 'C':
+                    if (filmCont < totalFilmArrayList.size()) {
+                        filmCont += 1;
+                        displayFilmInfo(filmCont, totalFilmArrayList);
+                    }
+                    break;
+                // Previous Film
+                case 'D':
+                    if (filmCont > 0) {
+                        filmCont -= 1;
+                        displayFilmInfo(filmCont, totalFilmArrayList);
+                    }
+                    break;
+                case 'E':
+                    // continue so, enters the selected movie to select Theater
 
+                    break;
+                case 'F':
+                    // cancel so, goes back to main loop & MainMenu
+                    option = '\u0000';
+                    break;
+            }
+            // exit if case 'F':
+            if ((int) option == 0) {
+                break;
+            } else {
+                option = super.getDispenser().waitEvent(5);
+            }
+        }
+        System.out.println("EXIT");
+    }
+
+    /**
+     * Displays Film info
+     * @param filmNumber int filmNumber
+     * @param totalFilmArrayList ArrayList totalFilmArrayList
+     */
+    private void displayFilmInfo(int filmNumber, ArrayList<Film> totalFilmArrayList) {
+        if (totalFilmArrayList.size() > filmNumber) {
+            super.getDispenser().setTitle("Film Selector: " + totalFilmArrayList.get(filmNumber).getName());
+            super.getDispenser().setDescription(totalFilmArrayList.get(filmNumber).getDescription());
+            super.getDispenser().setImage(totalFilmArrayList.get(filmNumber).getPoster());
+            super.getDispenser().setOption(0, "Duration: " + totalFilmArrayList.get(filmNumber).getDuration() + "h");
+            super.getDispenser().setOption(1, "Price: "  + totalFilmArrayList.get(filmNumber).getPrice() + "$");
+        }
     }
 
     /**

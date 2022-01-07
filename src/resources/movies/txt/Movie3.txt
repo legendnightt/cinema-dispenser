@@ -6,6 +6,6 @@ Description: Lucía cree llevar una vida modélica con todo bajo control. Siempr
 
 Sessions: 15:30 17:30 19:30 21:30
 
-Poster: FamiliaPerfecta.jpg
+Poster: LaFamiliaPerfecta.jpg
 
 Price: 7 €

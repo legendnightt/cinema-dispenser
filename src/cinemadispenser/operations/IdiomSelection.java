@@ -27,7 +27,7 @@ public class IdiomSelection extends Operation {
         super.getDispenser().setDescription("Select the language you want to change");
         int cont = 0;
         for (String idiom: super.getMultiplex().getIdiomHashSet()) {
-            super.getDispenser().setOption(cont, idiom);
+            super.getDispenser().setOption(cont, idiom.toUpperCase());
             cont++;
         }
         char option = super.getDispenser().waitEvent(30);

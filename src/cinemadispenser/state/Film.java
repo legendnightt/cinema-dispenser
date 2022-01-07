@@ -33,7 +33,7 @@ public class Film implements Serializable {
     /**
      * Film poster path
      */
-    private File poster;
+    private String poster;
 
     /**
      * Film builder
@@ -58,7 +58,7 @@ public class Film implements Serializable {
                         LocalTime.parse(sessions.substring(6, 11), DateTimeFormatter.ofPattern("HH:mm"))
                 );
             } else if (line.startsWith("Poster: ")) {
-                poster = new File("./src/resources/movies/images/" + cleanLine(line));
+                poster = new File("./src/resources/movies/images/" + cleanLine(line)).toString();
             } else if (line.startsWith("Price: ")) {
                 for (char ch : line.toCharArray()) {
                     if (Character.isDigit(ch)) {
@@ -114,7 +114,7 @@ public class Film implements Serializable {
      * Gets File poster
      * @return File poster
      */
-    public File getPoster() {
+    public String getPoster() {
         return poster;
     }
 
