@@ -122,47 +122,53 @@ public class MovieTicketSale extends Operation {
                     // continue so, enters the selected movie to select Session
                     Film selectedFilm  = totalFilmArrayList.get(filmCont);
                     ArrayList<Session> totalSessionsList = this.displaySessionButtons(selectedFilm);
-                    int sessionCount = -1;
+                    int sessionCont = -1;
                     option = super.getDispenser().waitEvent(seconds);
-                    switch (option) {
-                        // Session 1
-                        case 'A':
-                            if (0 < totalSessionsList.size() - 1) {
-                                sessionCount = 0;
-                            }
-                            break;
-                        // Session 2
-                        case 'B':
-                            if (1 < totalSessionsList.size() - 1) {
-                                sessionCount = 1;
-                            }
-                            break;
-                        // Session 3
-                        case 'C':
-                            if (2 < totalSessionsList.size() - 1) {
-                                sessionCount = 2;
-                            }
-                            break;
-                        // Session 4
-                        case 'D':
-                            if (3 < totalSessionsList.size() - 1) {
-                                sessionCount = 3;
-                            }
-                            break;
-                        // Go Back
-                        case 'E':
-                            goback = true;
-                            break;
-                        // Exit
-                        case 'F':
-                            // exit so, goes back to main loop & MainMenu
-                            option = '\u0000'; // default char value
-                            break;
-                    }
-                    // continues if session was selected
-                    if (sessionCount != -1) {
-                        System.out.println("SessionCount: " + sessionCount);
-                        Session selectedSession = totalSessionsList.get(sessionCount);
+                    // do while ig
+                    while ((int) option != 0 && !goback) {
+                        System.out.println("SessionCont: " + sessionCont);
+                        switch (option) {
+                            // Session 1
+                            case 'A':
+                                if (0 < totalSessionsList.size() - 1) {
+                                    sessionCont = 0;
+                                }
+                                break;
+                            // Session 2
+                            case 'B':
+                                if (1 < totalSessionsList.size() - 1) {
+                                    sessionCont = 1;
+                                }
+                                break;
+                            // Session 3
+                            case 'C':
+                                if (2 < totalSessionsList.size() - 1) {
+                                    sessionCont = 2;
+                                }
+                                break;
+                            // Session 4
+                            case 'D':
+                                if (3 < totalSessionsList.size() - 1) {
+                                    sessionCont = 3;
+                                }
+                                break;
+                            // Go Back
+                            case 'E':
+                                goback = true;
+                                break;
+                            // Exit
+                            case 'F':
+                                // exit so, goes back to main loop & MainMenu
+                                option = '\u0000'; // default char value
+                                break;
+                        }
+                        // continues if session was selected
+                        if (sessionCont != -1) {
+                            System.out.println("Session selected: " + sessionCont);
+                            Session selectedSession = totalSessionsList.get(sessionCont);
+                        } else if ((int) option != 0 && !goback) {
+                            option = super.getDispenser().waitEvent(seconds);
+                        }
                     }
                     break;
                 // Exit
@@ -172,9 +178,7 @@ public class MovieTicketSale extends Operation {
                     break;
             }
             // exit if case 'F':
-            if ((int) option == 0) {
-                break;
-            } else {
+            if ((int) option != 0) {
                 // if go back to Film selector from Session selector
                 if (goback) {
                     this.displayFilmButtons();
@@ -240,7 +244,7 @@ public class MovieTicketSale extends Operation {
         // set auxiliary stuff to "empty" buttons
         if (totalSessionsList.size() < 4) {
             for (int emptybuttons = totalSessionsList.size(); emptybuttons < 4;  emptybuttons++) {
-                super.getDispenser().setOption(emptybuttons, "======================");
+                super.getDispenser().setOption(emptybuttons, null);
             }
         }
         return totalSessionsList;
