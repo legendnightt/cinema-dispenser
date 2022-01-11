@@ -24,11 +24,11 @@ public class Theater implements Serializable {
     /**
      * Theater max rows
      */
-    private int maxrows;
+    private int maxrows = 1;
     /**
      * Theater max columns
      */
-    private int maxcols;
+    private int maxcols = 1;
     /**
      * Theater Seat Set
      */
@@ -49,10 +49,10 @@ public class Theater implements Serializable {
      * @throws FileNotFoundException if theaterFile or moviesFiles doesn't exist
      */
     public Theater(File theaterFile, File[] moviesFiles) throws FileNotFoundException {
-        setNumber(theaterFile);
-        setPrice();
-        generateSeatSet(theaterFile);
-        generateFilmSessionList(moviesFiles);
+        this.setNumber(theaterFile);
+        this.setPrice();
+        this.generateSeatSet(theaterFile);
+        this.generateFilmSessionList(moviesFiles);
     }
 
     /**
@@ -62,7 +62,7 @@ public class Theater implements Serializable {
     private void setNumber(File file) {
         for (char ch: file.toString().toCharArray()) {
             if (Character.isDigit(ch)) {
-                number = Character.getNumericValue(ch);
+                this.number = Character.getNumericValue(ch);
             }
         }
     }
@@ -73,7 +73,7 @@ public class Theater implements Serializable {
     private void setPrice() {
         int minprice = 10;
         int maxprice = 15;
-        price = (int) (Math.random() * (maxprice - minprice)) + minprice;
+        this.price = (int) (Math.random() * (maxprice - minprice)) + minprice;
     }
 
     /**
@@ -82,31 +82,25 @@ public class Theater implements Serializable {
      * @throws FileNotFoundException if theaterFile doesn't exist
      */
     private void generateSeatSet(File file) throws FileNotFoundException {
-        Scanner scrow = new Scanner(new FileReader(file));
         Scanner sc = new Scanner(new FileReader(file));
-        int row = 0;
+        int row = 1;
         int col = 1;
-        // while for getting max rows
-        while (scrow.hasNextLine()) {
-            scrow.nextLine();
-            row += 1;
-        }
-        maxrows = row;
-        // while for generating seats with exact row & col
-        maxcols = 1;
         while (sc.hasNextLine()) {
             String line = sc.nextLine();
             for (char ch: line.toCharArray()) {
                 if (ch == '*') {
-                    seatSet.add(new Seat(row, col));
-                    if (maxcols < col) {
-                        maxcols = col;
-                    }
+                    this.seatSet.add(new Seat(row, col));
                 }
                 col += 1;
             }
+            if (this.maxcols < col - 1) {
+                this.maxcols = col;
+            }
+            if (this.maxrows < row ) {
+                this.maxrows = row;
+            }
             col = 1;
-            row -= 1;
+            row += 1;
         }
     }
 
@@ -127,17 +121,15 @@ public class Theater implements Serializable {
                 if (line.startsWith("Theatre: ")) {
                     for (char ch : line.toCharArray()) {
                         if (Character.isDigit(ch) && number == Character.getNumericValue(ch)) {
-                            filmList.add(new Film(file));
+                            this.filmList.add(new Film(file));
                             found = true;
-                        } else {
-                            found = false;
                         }
                     }
                 } else if (line.startsWith("Sessions: ") && found) {
                     String sessions = line.substring(line.indexOf(":") + 1).trim();
                     // while for getting sessions from sessions string & converts them to LocalTime format to create new Session
                     while (!sessions.isEmpty()) {
-                        sessionList.add(new Session(LocalTime.parse(sessions.substring(0, 5), DateTimeFormatter.ofPattern("HH:mm")), seatSet));
+                        this.sessionList.add(new Session(LocalTime.parse(sessions.substring(0, 5), DateTimeFormatter.ofPattern("HH:mm")), seatSet));
                         sessions = sessions.substring(sessions.indexOf(":") + 3).trim();
                     }
                 }
@@ -150,7 +142,7 @@ public class Theater implements Serializable {
      * @return int number
      */
     public int getNumber() {
-        return number;
+        return this.number;
     }
 
     /**
@@ -158,7 +150,7 @@ public class Theater implements Serializable {
      * @return int price
      */
     public int getPrice() {
-        return price;
+        return this.price;
     }
 
     /**
@@ -166,7 +158,7 @@ public class Theater implements Serializable {
      * @return int maxrows
      */
     public int getMaxRows() {
-        return maxrows;
+        return this.maxrows;
     }
 
     /**
@@ -174,7 +166,7 @@ public class Theater implements Serializable {
      * @return int maxcols
      */
     public int getMaxCols() {
-        return maxcols;
+        return this.maxcols;
     }
 
     /**
@@ -182,7 +174,7 @@ public class Theater implements Serializable {
      * @return Set seatSet
      */
     public Set<Seat> getSeatSeat() {
-        return seatSet;
+        return this.seatSet;
     }
 
     /**
@@ -190,7 +182,7 @@ public class Theater implements Serializable {
      * @return List filmList
      */
     public List<Film> getFilmList() {
-        return filmList;
+        return this.filmList;
     }
 
     /**
@@ -198,7 +190,7 @@ public class Theater implements Serializable {
      * @return List sessionList
      */
     public List<Session> getSessionList() {
-        return sessionList;
+        return this.sessionList;
     }
 
 }
