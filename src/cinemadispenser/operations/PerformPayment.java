@@ -27,12 +27,12 @@ public class PerformPayment extends Operation {
     }
 
     /**
-     * Gets the proper title in this case
-     * @return String title
+     * Gets this className
+     * @return String className
      */
     @Override
     public String getTitle() {
-        return "PerformPayment";
+        return this.getClass().getSimpleName();
     }
 
 }

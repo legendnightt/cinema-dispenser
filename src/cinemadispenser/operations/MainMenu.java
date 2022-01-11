@@ -71,12 +71,12 @@ public class MainMenu extends Operation {
     }
 
     /**
-     * Gets the proper title in this case
+     * Gets this className
      * @return String title
      */
     @Override
     public String getTitle() {
-        return "MainMenu";
+        return this.getClass().getSimpleName();
     }
 
 }

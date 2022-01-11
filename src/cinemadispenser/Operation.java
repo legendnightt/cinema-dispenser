@@ -32,8 +32,8 @@ public abstract class Operation {
     public abstract void doOperation();
 
     /**
-     * Gets operation title
-     * @return String title
+     * Gets operation classname
+     * @return String className
      */
     public abstract String getTitle();
 
