@@ -2,10 +2,7 @@ package cinemadispenser.operations;
 
 import cinemadispenser.Multiplex;
 import cinemadispenser.Operation;
-import cinemadispenser.state.Film;
-import cinemadispenser.state.MultiplexState;
-import cinemadispenser.state.Session;
-import cinemadispenser.state.Theater;
+import cinemadispenser.state.*;
 import sienens.CinemaTicketDispenser;
 
 import java.time.temporal.ChronoUnit;
@@ -16,7 +13,6 @@ import java.nio.file.attribute.BasicFileAttributes;
 import java.time.LocalDateTime;
 import java.time.ZoneId;
 import java.util.ArrayList;
-import java.util.Objects;
 
 /**
  * MovieTicketSale class extends Operation
@@ -55,15 +51,15 @@ public class MovieTicketSale extends Operation {
             LocalDateTime convertedFileTime = LocalDateTime.ofInstant(attr.lastModifiedTime().toInstant(), ZoneId.systemDefault());
             // if state.bin exists & is not created in the same day, new MultiplexState & it creates again
             if (ChronoUnit.DAYS.between(convertedFileTime, now) != 0) {
-                generateState(serializablePath);
+                this.generateState(serializablePath);
                 System.out.println("Old State so, new state generated and serialized successfully!");
             } else {
                 ObjectInputStream in = new ObjectInputStream(new FileInputStream(serializablePath));
-                state = (MultiplexState) in.readObject();
+                this.state = (MultiplexState) in.readObject();
                 System.out.println("New state created from state.bin successfully!");
             }
         } else {
-            generateState(serializablePath);
+            this.generateState(serializablePath);
             System.out.println("No state.bin file so, New state generated and serialized successfully!");
         }
     }
@@ -74,9 +70,9 @@ public class MovieTicketSale extends Operation {
      * @throws IOException if something fails inside
      */
     private void generateState(String serializablePath) throws IOException {
-        state = new MultiplexState();
+        this.state = new MultiplexState();
         ObjectOutputStream out = new ObjectOutputStream(new FileOutputStream(serializablePath));
-        out.writeObject(state);
+        out.writeObject(this.state);
         out.flush();
         out.close();
     }
@@ -97,7 +93,7 @@ public class MovieTicketSale extends Operation {
         // displays first film
         this.displayFilmInfo(0, totalFilmArrayList);
         int filmCont = 0;
-        boolean goback = false;
+        boolean gobackFilm = false;
         char option = super.getDispenser().waitEvent(seconds);
         // if time is over, goes back to main loop & MainMenu
         while ((int) option != 0) {
@@ -121,40 +117,47 @@ public class MovieTicketSale extends Operation {
                 case 'E':
                     // continue so, enters the selected movie to select Session
                     Film selectedFilm  = totalFilmArrayList.get(filmCont);
-                    ArrayList<Session> totalSessionsList = this.displaySessionButtons(selectedFilm);
+                    Theater selectedTheater = null;
+                    for (Theater theater : this.state.getTheaterList()) {
+                        if (theater.getFilmList().contains(selectedFilm)) {
+                            selectedTheater = theater;
+                        }
+                    }
+                    assert selectedTheater != null;
+                    this.displaySessionButtons(selectedTheater, selectedFilm);
                     int sessionCont = -1;
+                    boolean gobackSession = false;
                     option = super.getDispenser().waitEvent(seconds);
                     // do while ig
-                    while ((int) option != 0 && !goback) {
-                        System.out.println("SessionCont: " + sessionCont);
+                    while ((int) option != 0 && !gobackFilm) {
                         switch (option) {
                             // Session 1
                             case 'A':
-                                if (0 < totalSessionsList.size() - 1) {
+                                if (0 < selectedTheater.getSessionList().size()) {
                                     sessionCont = 0;
                                 }
                                 break;
                             // Session 2
                             case 'B':
-                                if (1 < totalSessionsList.size() - 1) {
+                                if (1 < selectedTheater.getSessionList().size()) {
                                     sessionCont = 1;
                                 }
                                 break;
                             // Session 3
                             case 'C':
-                                if (2 < totalSessionsList.size() - 1) {
+                                if (2 < selectedTheater.getSessionList().size()) {
                                     sessionCont = 2;
                                 }
                                 break;
                             // Session 4
                             case 'D':
-                                if (3 < totalSessionsList.size() - 1) {
+                                if (3 < selectedTheater.getSessionList().size()) {
                                     sessionCont = 3;
                                 }
                                 break;
                             // Go Back
                             case 'E':
-                                goback = true;
+                                gobackFilm = true;
                                 break;
                             // Exit
                             case 'F':
@@ -165,10 +168,51 @@ public class MovieTicketSale extends Operation {
                         // continues if session was selected
                         if (sessionCont != -1) {
                             System.out.println("Session selected: " + sessionCont);
-                            Session selectedSession = totalSessionsList.get(sessionCont);
-                        } else if ((int) option != 0 && !goback) {
+                            Session selectedSession = selectedTheater.getSessionList().get(sessionCont);
+                            this.displaySeats(selectedTheater, selectedSession);
                             option = super.getDispenser().waitEvent(seconds);
+                            int maxSeats = 3;
+                            int contSeats = 0;
+                            while ((int) option != 0 && !gobackSession) {
+                                // Go Back
+                                if (option == 'A') {
+                                    gobackSession = true;
+                                }
+                                // Exit
+                                else if (option == 'B') {
+                                    // exit so, goes back to main loop & MainMenu
+                                    option = '\u0000'; // default char value
+                                }
+                                // Seat Selected
+                                else {
+                                    byte row = (byte)((option & 0xFF00) >> 8);
+                                    byte col = (byte)(option & 0xFF);
+                                    // if less than this.maxSeats selected & not occupied
+                                    if (!selectedSession.isOccupied(row, col)) {
+                                        /**
+                                         * max Seats can be bought 1 time
+                                         */
+                                        if (maxSeats > contSeats) {
+                                            selectedSession.ocuppiesSeat(row, col);
+                                            contSeats++;
+                                        }
+                                    } else {
+                                        selectedSession.unocuppiesSeat(row, col);
+                                        contSeats--;
+                                    }
+                                    this.displaySeats(selectedTheater, selectedSession);
+                                    option = super.getDispenser().waitEvent(seconds);
+                                }
+                            }
                         }
+                        if ((int) option != 0) {
+                            if (gobackSession) {
+                                super.getDispenser().setMenuMode();
+                                this.displaySessionButtons(selectedTheater, selectedFilm);
+                                option = super.getDispenser().waitEvent(seconds);
+                            }
+                        }
+                        sessionCont = -1;
                     }
                     break;
                 // Exit
@@ -180,10 +224,10 @@ public class MovieTicketSale extends Operation {
             // exit if case 'F':
             if ((int) option != 0) {
                 // if go back to Film selector from Session selector
-                if (goback) {
+                if (gobackFilm) {
                     this.displayFilmButtons();
                     this.displayFilmInfo(filmCont, totalFilmArrayList);
-                    goback = false;
+                    gobackFilm = false;
                 }
                 option = super.getDispenser().waitEvent(seconds);
             }
@@ -219,35 +263,53 @@ public class MovieTicketSale extends Operation {
 
     /**
      * Displays Session buttons
-     * @param selectedFilm Film selectedFilm
-     * @return ArrayList totalSessionsList
+     * @param theater Theater selectedTheater
+     * @param film Film selectedFilm
      */
-    private ArrayList<Session> displaySessionButtons (Film selectedFilm) {
-        super.getDispenser().setTitle("Session Selector: " + selectedFilm.getName());
+    private void displaySessionButtons (Theater theater, Film film) {
+        super.getDispenser().setTitle("Session Selector: " + film.getName());
         super.getDispenser().setOption(4, "Go Back");
-        // more accessible Sessions
-        ArrayList<Session> totalSessionsList = new ArrayList<>();
-        // searches for Theater with the Sessions, where Film is
-        for (Theater theater : this.state.getTheaterList()) {
-            for (Film film: theater.getFilmList()) {
-                if (Objects.equals(selectedFilm.getName(), film.getName())) {
-                    totalSessionsList.addAll(theater.getSessionList());
-                }
-            }
-        }
         // displays sessions as buttons
         int cont = 0;
-        for (Session session: totalSessionsList) {
+        for (Session session : theater.getSessionList()) {
             super.getDispenser().setOption(cont, session.getHour().toString());
             cont++;
         }
         // set auxiliary stuff to "empty" buttons
-        if (totalSessionsList.size() < 4) {
-            for (int emptybuttons = totalSessionsList.size(); emptybuttons < 4;  emptybuttons++) {
+        if (theater.getSessionList().size() < 4) {
+            for (int emptybuttons = theater.getSessionList().size(); emptybuttons < 4;  emptybuttons++) {
                 super.getDispenser().setOption(emptybuttons, null);
             }
         }
-        return totalSessionsList;
+    }
+
+    /**
+     * Display Theater Session seats
+     * @param theater Theater selectedTheater
+     * @param session Session SelectedSession
+     */
+    private void displaySeats(Theater theater, Session session) {
+        super.getDispenser().setTheaterMode(theater.getMaxRows(), theater.getMaxCols());
+        super.getDispenser().setTitle("Seat Selector for: " + session.getHour().toString());
+        super.getDispenser().setOption(0, "Go Back");
+        super.getDispenser().setOption(1, "Continue");
+        for (int row = 1; row < theater.getMaxRows() + 1; row++) {
+            for (int col = 1; col < theater.getMaxCols() + 1; col++) {
+                // checks if Seat is contained in Session occupiedSeatArrayList
+                if (session.isContained(row, col)) {
+                    if (!session.isOccupied(row, col)) {
+                        // unoccupied Seat
+                        super.getDispenser().markSeat(row, col, 2);
+                    } else {
+                        // occupied Seat
+                        super.getDispenser().markSeat(row, col, 1);
+                    }
+                } else {
+                    // empty space
+                    super.getDispenser().markSeat(row, col, 0);
+                }
+            }
+        }
     }
 
     /**

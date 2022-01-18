@@ -17,7 +17,7 @@ public class Session implements Serializable {
     /**
      * Session Seat status ArrayList
      */
-    ArrayList<Seat> occupiedSeatArrayList;
+    private final ArrayList<Seat> occupiedSeatArrayList;
 
     /**
      * Session builder
@@ -26,7 +26,18 @@ public class Session implements Serializable {
      */
     public Session(LocalTime hour, Set<Seat> seatSet) {
         this.hour = hour;
-        occupiedSeatArrayList = new ArrayList<>(seatSet);
+        this.occupiedSeatArrayList = new ArrayList<>();
+        this.occupiedSeatArrayList.addAll(seatSet);
+    }
+
+    /**
+     * Checks if a specific Seat is contained in occupiedSeatArrayList
+     * @param row Seat int row
+     * @param col Seat int column
+     * @return boolean, if Seat exits true, else false
+     */
+    public boolean isContained(int row, int col) {
+        return this.occupiedSeatArrayList.contains(new Seat(row, col));
     }
 
     /**
@@ -37,7 +48,7 @@ public class Session implements Serializable {
      */
     public boolean isOccupied(int row, int col) {
         // uses index of new Seat(row, col) Object, for getting Seat Object inside occupiedSeatArrayList & checking if it's occupied
-        return occupiedSeatArrayList.get(occupiedSeatArrayList.indexOf(new Seat(row, col))).getOccupied();
+        return this.occupiedSeatArrayList.get(this.occupiedSeatArrayList.indexOf(new Seat(row, col))).getOccupied();
     }
 
     /**
@@ -47,7 +58,7 @@ public class Session implements Serializable {
      */
     public void ocuppiesSeat(int row, int col) {
         // uses index of new Seat(row, col) Object, for getting Seat Object inside occupiedSeatArrayList & sets occupied
-        occupiedSeatArrayList.get(occupiedSeatArrayList.indexOf(new Seat(row, col))).setOccupied(true);
+        this.occupiedSeatArrayList.get(this.occupiedSeatArrayList.indexOf(new Seat(row, col))).setOccupied(true);
     }
 
     /**
@@ -57,7 +68,7 @@ public class Session implements Serializable {
      */
     public void unocuppiesSeat(int row, int col) {
         // uses index of new Seat(row, col) Object, for getting Seat Object inside occupiedSeatArrayList & sets unoccupied
-        occupiedSeatArrayList.get(occupiedSeatArrayList.indexOf(new Seat(row, col))).setOccupied(false);
+        this.occupiedSeatArrayList.get(this.occupiedSeatArrayList.indexOf(new Seat(row, col))).setOccupied(false);
     }
 
     /**
@@ -65,7 +76,7 @@ public class Session implements Serializable {
      * @return LocalTime hour
      */
     public LocalTime getHour() {
-        return hour;
+        return this.hour;
     }
 
 }
