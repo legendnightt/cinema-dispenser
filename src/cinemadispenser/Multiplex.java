@@ -46,9 +46,7 @@ public class Multiplex {
         // main loop
         while (true) {
             for (Operation operation: menu.getOperationList()) {
-                if (Objects.equals(operation.getTitle(), "MainMenu")) {
-                    operation.doOperation();
-                }
+                if (Objects.equals(operation.getTitle(), "MainMenu")) { operation.doOperation(); }
             }
         }
     }
@@ -57,17 +55,13 @@ public class Multiplex {
      * Sets idiom if exists in ArrayList idiomArrayList
      * @param idiom String idiom
      */
-    public void setIdiom(String idiom) {
-        this.idiom = idiom;
-    }
+    public void setIdiom(String idiom) { this.idiom = idiom; }
 
     /**
      * Gets ArrayList idiomArrayList
      * @return ArrayList idiomArrayList
      */
-    public ArrayList<String> getIdiomArrayList() {
-        return this.idiomArrayList;
-    }
+    public ArrayList<String> getIdiomArrayList() { return this.idiomArrayList; }
 
     /**
      * Gets ResourceBundle idiomBundle

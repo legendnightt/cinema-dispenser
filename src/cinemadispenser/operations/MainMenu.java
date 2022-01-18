@@ -39,9 +39,7 @@ public class MainMenu extends Operation {
      * Gets List operationList
      * @return List operationList
      */
-    public List<Operation> getOperationList() {
-        return this.operationList;
-    }
+    public List<Operation> getOperationList() { return this.operationList; }
 
     /**
      * Does the operation needed in this case
@@ -57,15 +55,11 @@ public class MainMenu extends Operation {
         char option = super.getDispenser().waitEvent(30);
         if (option == 'A') {
             for (Operation operation: this.operationList) {
-                if (Objects.equals(operation.getTitle(), "MovieTicketSale")) {
-                    operation.doOperation();
-                }
+                if (Objects.equals(operation.getTitle(), "MovieTicketSale")) { operation.doOperation(); }
             }
         } else if (option == 'B') {
             for (Operation operation: this.operationList) {
-                if (Objects.equals(operation.getTitle(), "IdiomSelection")) {
-                    operation.doOperation();
-                }
+                if (Objects.equals(operation.getTitle(), "IdiomSelection")) { operation.doOperation(); }
             }
         }
     }
@@ -75,8 +69,6 @@ public class MainMenu extends Operation {
      * @return String title
      */
     @Override
-    public String getTitle() {
-        return this.getClass().getSimpleName();
-    }
+    public String getTitle() { return this.getClass().getSimpleName(); }
 
 }
