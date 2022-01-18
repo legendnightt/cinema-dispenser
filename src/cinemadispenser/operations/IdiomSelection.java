@@ -23,18 +23,18 @@ public class IdiomSelection extends Operation {
      */
     @Override
     public void doOperation() {
-        super.getDispenser().setTitle("Language Selector");
-        super.getDispenser().setDescription("Select the language you want to change");
+        super.getDispenser().setTitle(super.getMultiplex().getIdiomBundle().getString("IdiomSelection_Title"));
+        super.getDispenser().setDescription(super.getMultiplex().getIdiomBundle().getString("IdiomSelection_Description"));
         int cont = 0;
-        for (String idiom: super.getMultiplex().getIdiomHashSet()) {
+        for (String idiom: super.getMultiplex().getIdiomArrayList()) {
             super.getDispenser().setOption(cont, idiom.toUpperCase());
             cont++;
         }
         char option = super.getDispenser().waitEvent(30);
         if (option == 'A') {
-            super.getMultiplex().setIdiom("en");
+            super.getMultiplex().setIdiom(super.getMultiplex().getIdiomArrayList().get(0));
         } else if (option == 'B') {
-            super.getMultiplex().setIdiom("es");
+            super.getMultiplex().setIdiom(super.getMultiplex().getIdiomArrayList().get(1));
         }
     }
 

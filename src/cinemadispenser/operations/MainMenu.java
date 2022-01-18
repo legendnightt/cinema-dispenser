@@ -29,10 +29,10 @@ public class MainMenu extends Operation {
     public MainMenu(CinemaTicketDispenser dispenser, Multiplex multiplex) throws IOException, ClassNotFoundException {
         super(dispenser, multiplex);
         // adding operations
-        operationList.add(this);
-        operationList.add(new IdiomSelection(dispenser, multiplex));
-        operationList.add(new MovieTicketSale(dispenser, multiplex));
-        operationList.add(new PerformPayment(dispenser, multiplex));
+        this.operationList.add(this);
+        this.operationList.add(new IdiomSelection(dispenser, multiplex));
+        this.operationList.add(new MovieTicketSale(dispenser, multiplex));
+        this.operationList.add(new PerformPayment(dispenser, multiplex));
     }
 
     /**
@@ -40,7 +40,7 @@ public class MainMenu extends Operation {
      * @return List operationList
      */
     public List<Operation> getOperationList() {
-        return operationList;
+        return this.operationList;
     }
 
     /**
@@ -49,20 +49,20 @@ public class MainMenu extends Operation {
     @Override
     public void doOperation() {
         super.getDispenser().setMessageMode();
-        super.getDispenser().setTitle("Welcome to Cinema Dispenser");
-        super.getDispenser().setDescription("Select the Operation you want to make");
-        super.getDispenser().setOption(0, "Buy Film Tickets");
-        super.getDispenser().setOption(1, "Change Language");
+        super.getDispenser().setTitle(super.getMultiplex().getIdiomBundle().getString("MainMenu_Title"));
+        super.getDispenser().setDescription(super.getMultiplex().getIdiomBundle().getString("MainMenu_Description"));
+        super.getDispenser().setOption(0, super.getMultiplex().getIdiomBundle().getString("MainMenu_Option1"));
+        super.getDispenser().setOption(1, super.getMultiplex().getIdiomBundle().getString("MainMenu_Option2"));
         // wait until 30s, goes back to Multiplex & resets language
         char option = super.getDispenser().waitEvent(30);
         if (option == 'A') {
-            for (Operation operation: operationList) {
+            for (Operation operation: this.operationList) {
                 if (Objects.equals(operation.getTitle(), "MovieTicketSale")) {
                     operation.doOperation();
                 }
             }
         } else if (option == 'B') {
-            for (Operation operation: operationList) {
+            for (Operation operation: this.operationList) {
                 if (Objects.equals(operation.getTitle(), "IdiomSelection")) {
                     operation.doOperation();
                 }

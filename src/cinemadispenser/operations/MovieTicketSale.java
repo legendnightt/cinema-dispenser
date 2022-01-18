@@ -239,10 +239,10 @@ public class MovieTicketSale extends Operation {
      * Displays Film options buttons
      */
     private void displayFilmButtons() {
-        super.getDispenser().setOption(2, "Next Film");
-        super.getDispenser().setOption(3, "Previous Film");
-        super.getDispenser().setOption(4, "Continue");
-        super.getDispenser().setOption(5, "Exit");
+        super.getDispenser().setOption(2, super.getMultiplex().getIdiomBundle().getString("MovieTicketSale_Film_NextFilm"));
+        super.getDispenser().setOption(3, super.getMultiplex().getIdiomBundle().getString("MovieTicketSale_Film_PreviousFilm"));
+        super.getDispenser().setOption(4, super.getMultiplex().getIdiomBundle().getString("Continue"));
+        super.getDispenser().setOption(5, super.getMultiplex().getIdiomBundle().getString("Exit"));
     }
 
     /**
@@ -253,11 +253,11 @@ public class MovieTicketSale extends Operation {
     private void displayFilmInfo(int filmNumber, ArrayList<Film> totalFilmArrayList) {
         if (totalFilmArrayList.size() > filmNumber) {
             Film film = totalFilmArrayList.get(filmNumber);
-            super.getDispenser().setTitle("Film Selector: " + film.getName());
+            super.getDispenser().setTitle(super.getMultiplex().getIdiomBundle().getString("MovieTicketSale_Film_Title") + ": " + film.getName());
             super.getDispenser().setDescription(film.getDescription());
             super.getDispenser().setImage(film.getPoster());
-            super.getDispenser().setOption(0, "Duration: " + film.getDuration() + "h");
-            super.getDispenser().setOption(1, "Price: "  + film.getPrice() + "$");
+            super.getDispenser().setOption(0, super.getMultiplex().getIdiomBundle().getString("MovieTicketSale_Film_Duration") + ": " + film.getDuration() + "h");
+            super.getDispenser().setOption(1, super.getMultiplex().getIdiomBundle().getString("MovieTicketSale_Film_Price") + ": "  + film.getPrice() + "$");
         }
     }
 
@@ -267,8 +267,8 @@ public class MovieTicketSale extends Operation {
      * @param film Film selectedFilm
      */
     private void displaySessionButtons (Theater theater, Film film) {
-        super.getDispenser().setTitle("Session Selector: " + film.getName());
-        super.getDispenser().setOption(4, "Go Back");
+        super.getDispenser().setTitle(super.getMultiplex().getIdiomBundle().getString("MovieTicketSale_Session_Title") + ": " + film.getName());
+        super.getDispenser().setOption(4, super.getMultiplex().getIdiomBundle().getString("GoBack"));
         // displays sessions as buttons
         int cont = 0;
         for (Session session : theater.getSessionList()) {
@@ -290,9 +290,9 @@ public class MovieTicketSale extends Operation {
      */
     private void displaySeats(Theater theater, Session session) {
         super.getDispenser().setTheaterMode(theater.getMaxRows(), theater.getMaxCols());
-        super.getDispenser().setTitle("Seat Selector for: " + session.getHour().toString());
-        super.getDispenser().setOption(0, "Go Back");
-        super.getDispenser().setOption(1, "Continue");
+        super.getDispenser().setTitle(super.getMultiplex().getIdiomBundle().getString("MovieTicketSale_Seat_Title") + ": " + session.getHour().toString());
+        super.getDispenser().setOption(0, super.getMultiplex().getIdiomBundle().getString("GoBack"));
+        super.getDispenser().setOption(1, super.getMultiplex().getIdiomBundle().getString("Continue"));
         for (int row = 1; row < theater.getMaxRows() + 1; row++) {
             for (int col = 1; col < theater.getMaxCols() + 1; col++) {
                 // checks if Seat is contained in Session occupiedSeatArrayList

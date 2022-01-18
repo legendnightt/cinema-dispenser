@@ -6,8 +6,9 @@ import urjc.UrjcBankServer;
 
 import java.io.File;
 import java.io.IOException;
-import java.util.HashSet;
+import java.util.ArrayList;
 import java.util.Objects;
+import java.util.ResourceBundle;
 
 /**
  * Multiplex class
@@ -15,9 +16,9 @@ import java.util.Objects;
 public class Multiplex {
 
     /**
-     * Idioms String HashSet
+     * Idioms String ArrayList
      */
-    private final HashSet<String> idiomHashSet = new HashSet<>();
+    private final ArrayList<String> idiomArrayList = new ArrayList<>();
     /**
      * Current Idiom working
      */
@@ -38,12 +39,12 @@ public class Multiplex {
             // cinemadispenser_idiom.properties -> idiom.properties
             final String headclear = idiomFile.toString().substring(idiomFile.toString().indexOf("_") + 1).trim();
             // idiom.properties -> idiom
-            this.idiomHashSet.add(headclear.substring(0, headclear.length() - 11));
+            this.idiomArrayList.add(headclear.substring(0, headclear.length() - 11));
         }
+        // sets default language
+        this.setIdiom(this.getIdiomArrayList().get(0));
         // main loop
         while (true) {
-            // sets default language
-            this.setIdiom("en");
             for (Operation operation: menu.getOperationList()) {
                 if (Objects.equals(operation.getTitle(), "MainMenu")) {
                     operation.doOperation();
@@ -53,29 +54,27 @@ public class Multiplex {
     }
 
     /**
-     * Sets idiom if exists in HashSet idiomHashSet
+     * Sets idiom if exists in ArrayList idiomArrayList
      * @param idiom String idiom
      */
     public void setIdiom(String idiom) {
-        if (idiomHashSet.contains(idiom)) {
-            this.idiom = idiom;
-        }
+        this.idiom = idiom;
     }
 
     /**
-     * Gets HashSet idiomHashSet
-     * @return HashSet idiomHashSet
+     * Gets ArrayList idiomArrayList
+     * @return ArrayList idiomArrayList
      */
-    public HashSet<String> getIdiomHashSet() {
-        return idiomHashSet;
+    public ArrayList<String> getIdiomArrayList() {
+        return this.idiomArrayList;
     }
 
     /**
-     * Gets String idiom
-     * @return String idiom
+     * Gets ResourceBundle idiomBundle
+     * @return ResourceBundle idiomBundle
      */
-    public String getIdiom() {
-        return idiom;
+    public ResourceBundle getIdiomBundle() {
+        return java.util.ResourceBundle.getBundle("resources/idioms/cinemadispenser_" + this.idiom);
     }
 
 }
