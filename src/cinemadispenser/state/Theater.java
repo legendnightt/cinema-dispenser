@@ -18,10 +18,6 @@ public class Theater implements Serializable {
      */
     private int number;
     /**
-     * Theater price
-     */
-    private int price;
-    /**
      * Theater max rows
      */
     private int maxrows = 1;
@@ -50,7 +46,6 @@ public class Theater implements Serializable {
      */
     public Theater(File theaterFile, File[] moviesFiles) throws FileNotFoundException {
         this.setNumber(theaterFile);
-        this.setPrice();
         this.generateSeatSet(theaterFile);
         this.generateFilmSessionList(moviesFiles);
     }
@@ -65,15 +60,6 @@ public class Theater implements Serializable {
                 this.number = Character.getNumericValue(ch);
             }
         }
-    }
-
-    /**
-     * Sets random price between minprice & maxprice to price
-     */
-    private void setPrice() {
-        int minprice = 10;
-        int maxprice = 15;
-        this.price = (int) (Math.random() * (maxprice - minprice)) + minprice;
     }
 
     /**
@@ -143,14 +129,6 @@ public class Theater implements Serializable {
      */
     public int getNumber() {
         return this.number;
-    }
-
-    /**
-     * Gets int price
-     * @return int price
-     */
-    public int getPrice() {
-        return this.price;
     }
 
     /**
