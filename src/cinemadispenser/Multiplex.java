@@ -49,7 +49,7 @@ public class Multiplex {
             this.idiomArrayList.add(headclear.substring(0, headclear.length() - 11));
         }
         // sets default language
-        this.setIdiom(this.getIdiomArrayList().get(0));
+        this.setIdiom(this.getIdiomArrayList().get(1));
         // main loop
         while (true) {
             for (Operation operation: this.menu.getOperationList()) {
@@ -57,7 +57,7 @@ public class Multiplex {
             }
             // checks if purchase finished, so changed language
             if (this.purchaseStatus) {
-                this.setIdiom(this.getIdiomArrayList().get(0));
+                this.setIdiom(this.getIdiomArrayList().get(1));
                 this.purchaseStatus = false;
             }
         }

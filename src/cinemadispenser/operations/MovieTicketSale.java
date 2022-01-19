@@ -214,7 +214,7 @@ public class MovieTicketSale extends Operation {
             cont++;
         }
         // set auxiliary stuff to "empty" buttons
-        if (selectedFilm.getSessionList().size() < 30) {
+        if (selectedFilm.getSessionList().size() < 5) {
             for (int emptybuttons = selectedFilm.getSessionList().size(); emptybuttons < 5;  emptybuttons++) {
                 super.getDispenser().setOption(emptybuttons, null);
             }
