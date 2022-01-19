@@ -1,8 +1,8 @@
 package cinemadispenser;
 
 import cinemadispenser.operations.MainMenu;
+import com.sun.tools.javac.Main;
 import sienens.CinemaTicketDispenser;
-import urjc.UrjcBankServer;
 
 import java.io.File;
 import java.io.IOException;
@@ -16,6 +16,10 @@ import java.util.ResourceBundle;
 public class Multiplex {
 
     /**
+     * MainMenu menu
+     */
+    private MainMenu menu;
+    /**
      * Idioms String ArrayList
      */
     private final ArrayList<String> idiomArrayList = new ArrayList<>();
@@ -23,6 +27,14 @@ public class Multiplex {
      * Current Idiom working
      */
     private String idiom;
+    /**
+     * int purchasePrice MovieTicketSale
+     */
+    private int purchasePrice;
+    /**
+     * boolean purchaseStatus PerformPayment
+     */
+    private boolean purchaseStatus;
 
     /**
      * Starts all, and have main loop of the application
@@ -31,8 +43,7 @@ public class Multiplex {
      */
     public void start() throws IOException, ClassNotFoundException {
         CinemaTicketDispenser dispenser = new CinemaTicketDispenser();
-        UrjcBankServer bank = new UrjcBankServer();
-        MainMenu menu = new MainMenu(dispenser, this);
+        this.menu = new MainMenu(dispenser, this);
         File idiomsDir = new File("./src/resources/idioms/");
         // searches for idioms and collect them into HashSet<String> idiomHashSet
         for (File idiomFile: Objects.requireNonNull(idiomsDir.listFiles())) {
@@ -45,23 +56,35 @@ public class Multiplex {
         this.setIdiom(this.getIdiomArrayList().get(0));
         // main loop
         while (true) {
-            for (Operation operation: menu.getOperationList()) {
+            for (Operation operation: this.menu.getOperationList()) {
                 if (Objects.equals(operation.getTitle(), "MainMenu")) { operation.doOperation(); }
             }
         }
     }
 
     /**
+     * Gets MainMenu menu
+     * @return MainMenu menu
+     */
+    public MainMenu getMenu() {
+        return this.menu;
+    }
+
+    /**
      * Sets idiom if exists in ArrayList idiomArrayList
      * @param idiom String idiom
      */
-    public void setIdiom(String idiom) { this.idiom = idiom; }
+    public void setIdiom(String idiom) {
+        this.idiom = idiom;
+    }
 
     /**
      * Gets ArrayList idiomArrayList
      * @return ArrayList idiomArrayList
      */
-    public ArrayList<String> getIdiomArrayList() { return this.idiomArrayList; }
+    public ArrayList<String> getIdiomArrayList() {
+        return this.idiomArrayList;
+    }
 
     /**
      * Gets ResourceBundle idiomBundle
@@ -69,6 +92,38 @@ public class Multiplex {
      */
     public ResourceBundle getIdiomBundle() {
         return java.util.ResourceBundle.getBundle("resources/idioms/cinemadispenser_" + this.idiom);
+    }
+
+    /**
+     * Sets int purchasePrice MovieTicketSale
+     * @param purchasePrice int purchasePrice MovieTicketSale
+     */
+    public void setPurchasePrice(int purchasePrice) {
+        this.purchasePrice = purchasePrice;
+    }
+
+    /**
+     * Gets int purchasePrice MovieTicketSale
+     * @return int purchasePrice MovieTicketSale
+     */
+    public int getPurchasePrice() {
+        return this.purchasePrice;
+    }
+
+    /**
+     * Sets boolean purchaseStatus PerformPayment
+     * @param purchaseStatus boolean purchaseStatus PerformPayment
+     */
+    public void setPurchaseStatus(boolean purchaseStatus) {
+        this.purchaseStatus = purchaseStatus;
+    }
+
+    /**
+     * Gets boolean purchaseStatus PerformPayment
+     * @return boolean purchaseStatus PerformPayment
+     */
+    public boolean getPurchaseStatus() {
+        return this.purchaseStatus;
     }
 
 }

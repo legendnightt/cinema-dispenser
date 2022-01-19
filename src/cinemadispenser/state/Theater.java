@@ -151,7 +151,7 @@ public class Theater implements Serializable {
      * Gets Set seatSet
      * @return Set seatSet
      */
-    public Set<Seat> getSeatSeat() {
+    public Set<Seat> getSeatSet() {
         return this.seatSet;
     }
 

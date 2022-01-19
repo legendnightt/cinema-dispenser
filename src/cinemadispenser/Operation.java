@@ -42,7 +42,7 @@ public abstract class Operation {
      * @return CinemaTicketDispenser dispenser
      */
     public CinemaTicketDispenser getDispenser() {
-        return dispenser;
+        return this.dispenser;
     }
 
     /**
@@ -50,7 +50,7 @@ public abstract class Operation {
      * @return Multiplex multiplex
      */
     public Multiplex getMultiplex() {
-        return multiplex;
+        return this.multiplex;
     }
 
 }

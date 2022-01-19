@@ -32,7 +32,6 @@ public class MainMenu extends Operation {
         this.operationList.add(this);
         this.operationList.add(new IdiomSelection(dispenser, multiplex));
         this.operationList.add(new MovieTicketSale(dispenser, multiplex));
-        this.operationList.add(new PerformPayment(dispenser, multiplex));
     }
 
     /**
@@ -55,11 +54,15 @@ public class MainMenu extends Operation {
         char option = super.getDispenser().waitEvent(30);
         if (option == 'A') {
             for (Operation operation: this.operationList) {
-                if (Objects.equals(operation.getTitle(), "MovieTicketSale")) { operation.doOperation(); }
+                if (Objects.equals(operation.getTitle(), "MovieTicketSale")) {
+                    operation.doOperation();
+                }
             }
         } else if (option == 'B') {
             for (Operation operation: this.operationList) {
-                if (Objects.equals(operation.getTitle(), "IdiomSelection")) { operation.doOperation(); }
+                if (Objects.equals(operation.getTitle(), "IdiomSelection")) {
+                    operation.doOperation();
+                }
             }
         }
     }
@@ -69,6 +72,8 @@ public class MainMenu extends Operation {
      * @return String title
      */
     @Override
-    public String getTitle() { return this.getClass().getSimpleName(); }
+    public String getTitle() {
+        return this.getClass().getSimpleName();
+    }
 
 }
