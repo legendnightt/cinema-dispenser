@@ -34,7 +34,7 @@ public class Multiplex {
     /**
      * boolean purchaseStatus PerformPayment
      */
-    private boolean purchaseStatus;
+    private boolean purchaseStatus = false;
 
     /**
      * Starts all, and have main loop of the application
@@ -58,6 +58,10 @@ public class Multiplex {
         while (true) {
             for (Operation operation: this.menu.getOperationList()) {
                 if (Objects.equals(operation.getTitle(), "MainMenu")) { operation.doOperation(); }
+            }
+            // checks if purchase finished, so changed language
+            if (purchaseStatus) {
+                this.setIdiom(this.getIdiomArrayList().get(0));
             }
         }
     }

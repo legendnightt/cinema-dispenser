@@ -124,7 +124,7 @@ public class MovieTicketSale extends Operation {
                     // Seats selection
                     ArrayList<Seat> selectSeats = this.selectSeats(selectedTheater, selectedSession);
                     if (selectSeats.size() != 0) {
-                        this.PerformPayment(selectedTheater, selectedFilm, selectedSession, selectSeats);
+                        this.performPayment(selectedTheater, selectedFilm, selectedSession, selectSeats);
                     }
                 }
             }
@@ -352,13 +352,13 @@ public class MovieTicketSale extends Operation {
         // Prints ticket for each Seat
         for (Seat seat : selectedSeats) {
             ArrayList<String> ticket = new ArrayList<>();
-            ticket.add("   " + super.getMultiplex().getIdiomBundle().getString("MovieTicketSale_Tickets_Title") + " " + selectedFilm.getName());
+            ticket.add("   " + super.getMultiplex().getIdiomBundle().getString("MovieTicketSale_Ticket_Title") + " " + selectedFilm.getName());
             ticket.add("   ===================");
-            ticket.add("   " + super.getMultiplex().getIdiomBundle().getString("MovieTicketSale_Tickets_Theater") + " " + selectedTheater.getNumber());
+            ticket.add("   " + super.getMultiplex().getIdiomBundle().getString("MovieTicketSale_Ticket_Theater") + " " + selectedTheater.getNumber());
             ticket.add("   " + selectedSession.getHour().toString());
-            ticket.add("   " + super.getMultiplex().getIdiomBundle().getString("MovieTicketSale_Tickets_Row") + " " + seat.getRow());
-            ticket.add("   " + super.getMultiplex().getIdiomBundle().getString("MovieTicketSale_Tickets_Seat") + " " + seat.getCol());
-            ticket.add("   " + super.getMultiplex().getIdiomBundle().getString("MovieTicketSale_Tickets_Price") + " " + selectedFilm.getPrice() + "$");
+            ticket.add("   " + super.getMultiplex().getIdiomBundle().getString("MovieTicketSale_Ticket_Row") + " " + seat.getRow());
+            ticket.add("   " + super.getMultiplex().getIdiomBundle().getString("MovieTicketSale_Ticket_Seat") + " " + seat.getCol());
+            ticket.add("   " + super.getMultiplex().getIdiomBundle().getString("MovieTicketSale_Ticket_Price") + " " + selectedFilm.getPrice() + "$");
             super.getDispenser().print(ticket);
         }
     }
@@ -370,12 +370,18 @@ public class MovieTicketSale extends Operation {
      * @param selectedSession Session selectedSession
      * @param selectedSeats ArrayList selectedSeats
      */
-    private void PerformPayment(Theater selectedTheater, Film selectedFilm, Session selectedSession, ArrayList<Seat> selectedSeats) {
+    private void performPayment(Theater selectedTheater, Film selectedFilm, Session selectedSession, ArrayList<Seat> selectedSeats) {
         this.computePrice(selectedFilm, selectedSeats.size());
         // prints PerformPayment info
         super.getDispenser().setMessageMode();
-        super.getDispenser().setTitle(super.getMultiplex().getIdiomBundle().getString("PerformPayment_Title"));
-        super.getDispenser().setDescription(selectedSeats.size() + " " + super.getMultiplex().getIdiomBundle().getString("PerformPayment_Description") + " " +  selectedFilm.getName() + "(" + selectedSession.getHour() + "): " + super.getMultiplex().getPurchasePrice() + "$");
+        super.getDispenser().setTitle(super.getMultiplex().getIdiomBundle().getString("MovieTicketSale_PerformPayment_Title"));
+        String description;
+        if (selectedSeats.size() == 1) {
+            description = super.getMultiplex().getIdiomBundle().getString("MovieTicketSale_PerformPayment_Description_1");
+        } else {
+            description = super.getMultiplex().getIdiomBundle().getString("MovieTicketSale_PerformPayment_Description_More");
+        }
+        super.getDispenser().setDescription(selectedSeats.size() + " " + description + " " +  selectedFilm.getName() + "(" + selectedSession.getHour() + "): " + super.getMultiplex().getPurchasePrice() + "$");
         super.getDispenser().setOption(0, null);
         super.getDispenser().setOption(1, null);
         this.payment.doOperation();
@@ -384,12 +390,12 @@ public class MovieTicketSale extends Operation {
             try {
                 this.deserializeMultiplexState(this.serializablePath);
                 this.serializeMultiplexState(this.serializablePath);
-                super.getDispenser().setTitle("Printing Tickets");
+                super.getDispenser().setTitle(super.getMultiplex().getIdiomBundle().getString("MovieTicketSale_Ticket_Print"));
                 super.getDispenser().setDescription("........");
                 super.getDispenser().waitEvent(5);
                 this.printTickets(selectedTheater, selectedFilm, selectedSession, selectedSeats);
-                super.getDispenser().setTitle("Take your Tickets");
-                super.getDispenser().setDescription("Thanks for trusting us for watching best cinema movies\nHope to see you back!");
+                super.getDispenser().setTitle(super.getMultiplex().getIdiomBundle().getString("MovieTicketSale_Ticket_Take_Title"));
+                super.getDispenser().setDescription(super.getMultiplex().getIdiomBundle().getString("MovieTicketSale_Ticket_Take_Description"));
                 super.getDispenser().waitEvent(10);
             } catch (IOException e) {
                 e.printStackTrace();
