@@ -4,8 +4,6 @@ import java.io.File;
 import java.io.FileNotFoundException;
 import java.io.FileReader;
 import java.io.Serializable;
-import java.time.LocalTime;
-import java.time.format.DateTimeFormatter;
 import java.util.*;
 
 /**
@@ -33,10 +31,6 @@ public class Theater implements Serializable {
      * Theater Film List
      */
     private final List<Film> filmList = new ArrayList<>();
-    /**
-     * Theater Session List
-     */
-    private final List<Session> sessionList = new ArrayList<>();
 
     /**
      * Theater builder
@@ -47,7 +41,7 @@ public class Theater implements Serializable {
     public Theater(File theaterFile, File[] moviesFiles) throws FileNotFoundException {
         this.setNumber(theaterFile);
         this.generateSeatSet(theaterFile);
-        this.generateFilmSessionList(moviesFiles);
+        this.generateFilmList(moviesFiles);
     }
 
     /**
@@ -96,27 +90,17 @@ public class Theater implements Serializable {
      * @param files File moviesFiles
      * @throws FileNotFoundException if moviesFiles doesn't exist
      */
-    private void generateFilmSessionList (File[] files) throws FileNotFoundException {
+    private void generateFilmList (File[] files) throws FileNotFoundException {
         for (File file: files) {
             Scanner sc = new Scanner(new FileReader(file));
-            // while for searching theater films
-            boolean found = false;
-            // while for getting Theatre Films & Sessions
+            // while for getting Theatre Films
             while (sc.hasNextLine()) {
                 String line = sc.nextLine();
                 if (line.startsWith("Theatre: ")) {
                     for (char ch : line.toCharArray()) {
                         if (Character.isDigit(ch) && number == Character.getNumericValue(ch)) {
                             this.filmList.add(new Film(file));
-                            found = true;
                         }
-                    }
-                } else if (line.startsWith("Sessions: ") && found) {
-                    String sessions = line.substring(line.indexOf(":") + 1).trim();
-                    // while for getting sessions from sessions string & converts them to LocalTime format to create new Session
-                    while (!sessions.isEmpty()) {
-                        this.sessionList.add(new Session(LocalTime.parse(sessions.substring(0, 5), DateTimeFormatter.ofPattern("HH:mm"))));
-                        sessions = sessions.substring(sessions.indexOf(":") + 3).trim();
                     }
                 }
             }
@@ -161,14 +145,6 @@ public class Theater implements Serializable {
      */
     public List<Film> getFilmList() {
         return this.filmList;
-    }
-
-    /**
-     * Gets List sessionList
-     * @return List sessionList
-     */
-    public List<Session> getSessionList() {
-        return this.sessionList;
     }
 
 }

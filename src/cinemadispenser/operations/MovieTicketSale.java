@@ -119,7 +119,7 @@ public class MovieTicketSale extends Operation {
             }
             // Session selection
             if (selectedTheater != null) {
-                Session selectedSession = this.selectSession(selectedTheater, selectedFilm);
+                Session selectedSession = this.selectSession(selectedFilm);
                 if (selectedSession != null) {
                     // Seats selection
                     ArrayList<Seat> selectSeats = this.selectSeats(selectedTheater, selectedSession);
@@ -197,21 +197,21 @@ public class MovieTicketSale extends Operation {
 
     /**
      * Makes possible to select Session inside Theater
-     * @param selectedTheater Theater selectedTheater
+     * @param selectedFilm Film selectedFilm
      * @return Session selectedSession
      */
-    private Session selectSession(Theater selectedTheater, Film selectedFilm) {
+    private Session selectSession(Film selectedFilm) {
         // Session buttons
         super.getDispenser().setTitle(super.getMultiplex().getIdiomBundle().getString("MovieTicketSale_Session_Title") + ": " + selectedFilm.getName());
         // displays sessions as buttons
         int cont = 0;
-        for (Session session : selectedTheater.getSessionList()) {
+        for (Session session : selectedFilm.getSessionList()) {
             super.getDispenser().setOption(cont, session.getHour().toString());
             cont++;
         }
         // set auxiliary stuff to "empty" buttons
-        if (selectedTheater.getSessionList().size() < 30) {
-            for (int emptybuttons = selectedTheater.getSessionList().size(); emptybuttons < 5;  emptybuttons++) {
+        if (selectedFilm.getSessionList().size() < 30) {
+            for (int emptybuttons = selectedFilm.getSessionList().size(); emptybuttons < 5;  emptybuttons++) {
                 super.getDispenser().setOption(emptybuttons, null);
             }
         }
@@ -220,28 +220,28 @@ public class MovieTicketSale extends Operation {
         switch (option) {
             // Session 1
             case 'A':
-                if (0 < selectedTheater.getSessionList().size()) {
-                    selectedSession = selectedTheater.getSessionList().get(0);
+                if (0 < selectedFilm.getSessionList().size()) {
+                    selectedSession = selectedFilm.getSessionList().get(0);
                 } break;
             // Session 2
             case 'B':
-                if (1 < selectedTheater.getSessionList().size()) {
-                    selectedSession = selectedTheater.getSessionList().get(1);
+                if (1 < selectedFilm.getSessionList().size()) {
+                    selectedSession = selectedFilm.getSessionList().get(1);
                 } break;
             // Session 3
             case 'C':
-                if (2 < selectedTheater.getSessionList().size()) {
-                    selectedSession = selectedTheater.getSessionList().get(2);
+                if (2 < selectedFilm.getSessionList().size()) {
+                    selectedSession = selectedFilm.getSessionList().get(2);
                 } break;
             // Session 4
             case 'D':
-                if (3 < selectedTheater.getSessionList().size()) {
-                    selectedSession = selectedTheater.getSessionList().get(3);
+                if (3 < selectedFilm.getSessionList().size()) {
+                    selectedSession = selectedFilm.getSessionList().get(3);
                 } break;
             // Session 5
             case 'E':
-                if (4 < selectedTheater.getSessionList().size()) {
-                    selectedSession = selectedTheater.getSessionList().get(4);
+                if (4 < selectedFilm.getSessionList().size()) {
+                    selectedSession = selectedFilm.getSessionList().get(4);
                 } break;
             // Exit
             case 'F':

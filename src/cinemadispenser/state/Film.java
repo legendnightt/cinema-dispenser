@@ -34,6 +34,10 @@ public class Film implements Serializable {
      * Film poster path
      */
     private String poster;
+    /**
+     * Film Session List
+     */
+    private final List<Session> sessionList = new ArrayList<>();
 
     /**
      * Film builder
@@ -57,6 +61,11 @@ public class Film implements Serializable {
                         // second session
                         LocalTime.parse(sessions.substring(6, 11), DateTimeFormatter.ofPattern("HH:mm"))
                 );
+                // while for getting sessions from sessions string & converts them to LocalTime format to create new Session
+                while (!sessions.isEmpty()) {
+                    this.sessionList.add(new Session(LocalTime.parse(sessions.substring(0, 5), DateTimeFormatter.ofPattern("HH:mm"))));
+                    sessions = sessions.substring(sessions.indexOf(":") + 3).trim();
+                }
             } else if (line.startsWith("Poster: ")) {
                 poster = new File("./src/resources/movies/images/" + cleanLine(line)).toString();
             } else if (line.startsWith("Price: ")) {
@@ -116,6 +125,14 @@ public class Film implements Serializable {
      */
     public String getPoster() {
         return poster;
+    }
+
+    /**
+     * Gets List SessionList
+     * @return List SessionList
+     */
+    public List<Session> getSessionList() {
+        return this.sessionList;
     }
 
 }
