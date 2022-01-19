@@ -60,8 +60,9 @@ public class Multiplex {
                 if (Objects.equals(operation.getTitle(), "MainMenu")) { operation.doOperation(); }
             }
             // checks if purchase finished, so changed language
-            if (purchaseStatus) {
+            if (this.purchaseStatus) {
                 this.setIdiom(this.getIdiomArrayList().get(0));
+                this.purchaseStatus = false;
             }
         }
     }
