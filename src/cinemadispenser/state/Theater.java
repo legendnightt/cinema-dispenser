@@ -39,34 +39,18 @@ public class Theater implements Serializable {
      * @throws FileNotFoundException if theaterFile or moviesFiles doesn't exist
      */
     public Theater(File theaterFile, File[] moviesFiles) throws FileNotFoundException {
-        this.setNumber(theaterFile);
-        this.generateSeatSet(theaterFile);
-        this.generateFilmList(moviesFiles);
-    }
-
-    /**
-     * Sets theater number, searching the corresponding one in the txt file
-     * @param file File theaterFile
-     */
-    private void setNumber(File file) {
-        for (char ch: file.toString().toCharArray()) {
+        // Sets theater number, searching the corresponding one in the txt file
+        for (char ch: theaterFile.toString().toCharArray()) {
             if (Character.isDigit(ch)) {
                 this.number = Character.getNumericValue(ch);
             }
         }
-    }
-
-    /**
-     * Creates Seat Set with theaterFile directory, also maxrows & maxcols
-     * @param file File theaterFile
-     * @throws FileNotFoundException if theaterFile doesn't exist
-     */
-    private void generateSeatSet(File file) throws FileNotFoundException {
-        Scanner sc = new Scanner(new FileReader(file));
+        // Creates Seat Set with theaterFile directory, also maxrows & maxcols
+        Scanner scTheater = new Scanner(new FileReader(theaterFile));
         int row = 1;
         int col = 1;
-        while (sc.hasNextLine()) {
-            String line = sc.nextLine();
+        while (scTheater.hasNextLine()) {
+            String line = scTheater.nextLine();
             for (char ch: line.toCharArray()) {
                 if (ch == '*') {
                     this.seatSet.add(new Seat(row, col));
@@ -82,24 +66,16 @@ public class Theater implements Serializable {
             col = 1;
             row += 1;
         }
-    }
-
-    /**
-     * Creates corresponding films to Theater & adds them into filmList,
-     * same with sessions with sessionList
-     * @param files File moviesFiles
-     * @throws FileNotFoundException if moviesFiles doesn't exist
-     */
-    private void generateFilmList (File[] files) throws FileNotFoundException {
-        for (File file: files) {
-            Scanner sc = new Scanner(new FileReader(file));
+        // Creates corresponding films to Theater & adds them into filmList
+        for (File filmFile: moviesFiles) {
+            Scanner scFilm = new Scanner(new FileReader(filmFile));
             // while for getting Theatre Films
-            while (sc.hasNextLine()) {
-                String line = sc.nextLine();
+            while (scFilm.hasNextLine()) {
+                String line = scFilm.nextLine();
                 if (line.startsWith("Theatre: ")) {
                     for (char ch : line.toCharArray()) {
                         if (Character.isDigit(ch) && number == Character.getNumericValue(ch)) {
-                            this.filmList.add(new Film(file));
+                            this.filmList.add(new Film(filmFile));
                         }
                     }
                 }

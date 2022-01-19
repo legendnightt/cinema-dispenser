@@ -115,7 +115,9 @@ public class MovieTicketSale extends Operation {
             Theater selectedTheater = null;
             // gets Film Theater
             for (Theater theater : this.state.getTheaterList()) {
-                if (theater.getFilmList().contains(selectedFilm)) { selectedTheater = theater; }
+                if (theater.getFilmList().contains(selectedFilm)) {
+                    selectedTheater = theater;
+                }
             }
             // Session selection
             if (selectedTheater != null) {
