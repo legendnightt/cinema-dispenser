@@ -36,50 +36,53 @@ public class Theater implements Serializable {
      * Theater builder
      * @param theaterFile File theaterFile
      * @param moviesFiles File moviesFiles
-     * @throws FileNotFoundException if theaterFile or moviesFiles doesn't exist
      */
-    public Theater(File theaterFile, File[] moviesFiles) throws FileNotFoundException {
+    public Theater(File theaterFile, File[] moviesFiles) {
         // Sets theater number, searching the corresponding one in the txt file
         for (char ch: theaterFile.toString().toCharArray()) {
             if (Character.isDigit(ch)) {
                 this.number = Character.getNumericValue(ch);
             }
         }
-        // Creates Seat Set with theaterFile directory, also maxrows & maxcols
-        Scanner scTheater = new Scanner(new FileReader(theaterFile));
-        int row = 1;
-        int col = 1;
-        while (scTheater.hasNextLine()) {
-            String line = scTheater.nextLine();
-            for (char ch: line.toCharArray()) {
-                if (ch == '*') {
-                    this.seatSet.add(new Seat(row, col));
+        try {
+            // Creates Seat Set with theaterFile directory, also maxrows & maxcols
+            Scanner scTheater = new Scanner(new FileReader(theaterFile));
+            int row = 1;
+            int col = 1;
+            while (scTheater.hasNextLine()) {
+                String line = scTheater.nextLine();
+                for (char ch: line.toCharArray()) {
+                    if (ch == '*') {
+                        this.seatSet.add(new Seat(row, col));
+                    }
+                    col += 1;
                 }
-                col += 1;
+                if (this.maxcols < col - 1) {
+                    this.maxcols = col;
+                }
+                if (this.maxrows < row ) {
+                    this.maxrows = row;
+                }
+                col = 1;
+                row += 1;
             }
-            if (this.maxcols < col - 1) {
-                this.maxcols = col;
-            }
-            if (this.maxrows < row ) {
-                this.maxrows = row;
-            }
-            col = 1;
-            row += 1;
-        }
-        // Creates corresponding films to Theater & adds them into filmList
-        for (File filmFile: moviesFiles) {
-            Scanner scFilm = new Scanner(new FileReader(filmFile));
-            // while for getting Theatre Films
-            while (scFilm.hasNextLine()) {
-                String line = scFilm.nextLine();
-                if (line.startsWith("Theatre: ")) {
-                    for (char ch : line.toCharArray()) {
-                        if (Character.isDigit(ch) && number == Character.getNumericValue(ch)) {
-                            this.filmList.add(new Film(filmFile));
+            // Creates corresponding films to Theater & adds them into filmList
+            for (File filmFile: moviesFiles) {
+                Scanner scFilm = new Scanner(new FileReader(filmFile));
+                // while for getting Theatre Films
+                while (scFilm.hasNextLine()) {
+                    String line = scFilm.nextLine();
+                    if (line.startsWith("Theatre: ")) {
+                        for (char ch : line.toCharArray()) {
+                            if (Character.isDigit(ch) && this.number == Character.getNumericValue(ch)) {
+                                this.filmList.add(new Film(filmFile));
+                            }
                         }
                     }
                 }
             }
+        } catch (FileNotFoundException e) {
+            e.printStackTrace();
         }
     }
 

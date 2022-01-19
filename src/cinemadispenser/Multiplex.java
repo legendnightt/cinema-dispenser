@@ -1,11 +1,9 @@
 package cinemadispenser;
 
 import cinemadispenser.operations.MainMenu;
-import com.sun.tools.javac.Main;
 import sienens.CinemaTicketDispenser;
 
 import java.io.File;
-import java.io.IOException;
 import java.util.ArrayList;
 import java.util.Objects;
 import java.util.ResourceBundle;
@@ -38,10 +36,8 @@ public class Multiplex {
 
     /**
      * Starts all, and have main loop of the application
-     * @throws IOException IO exception
-     * @throws ClassNotFoundException Class not found
      */
-    public void start() throws IOException, ClassNotFoundException {
+    public void start() {
         CinemaTicketDispenser dispenser = new CinemaTicketDispenser();
         this.menu = new MainMenu(dispenser, this);
         File idiomsDir = new File("./src/resources/idioms/");

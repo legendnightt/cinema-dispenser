@@ -4,7 +4,6 @@ import cinemadispenser.Multiplex;
 import cinemadispenser.Operation;
 import sienens.CinemaTicketDispenser;
 
-import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Objects;
@@ -23,10 +22,8 @@ public class MainMenu extends Operation {
      * MainMenu builder
      * @param dispenser CinemaTicketDispenser dispenser
      * @param multiplex Multiplex multiplex
-     * @throws IOException IO exception
-     * @throws ClassNotFoundException Class not found
      */
-    public MainMenu(CinemaTicketDispenser dispenser, Multiplex multiplex) throws IOException, ClassNotFoundException {
+    public MainMenu(CinemaTicketDispenser dispenser, Multiplex multiplex) {
         super(dispenser, multiplex);
         // adding operations
         this.operationList.add(this);

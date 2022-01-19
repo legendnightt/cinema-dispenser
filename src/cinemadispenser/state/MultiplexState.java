@@ -17,47 +17,14 @@ public class MultiplexState implements Serializable {
 
     /**
      * MultiplexState builder
-     * @throws FileNotFoundException  if theaterFile or moviesFiles doesn't exist
      */
-    public MultiplexState() throws FileNotFoundException {
+    public MultiplexState() {
         File moviesDir = new File("./src/resources/movies/txt/");
         File theatersDir = new File("./src/resources/theaters/");
-        // searches theatres in path & adds movie list path
-        theaterSearch(Objects.requireNonNull(theatersDir.listFiles()), Objects.requireNonNull(moviesDir.listFiles()));
-    }
-
-    /**
-     * Searches in File theaterFiles & creates new Theater(theaterFile, moviesFiles) inside theaterList
-     * @param theaterFiles File theaterFiles
-     * @param moviesFiles File moviesFiles
-     * @throws FileNotFoundException if theaterFile or moviesFiles doesn't exist
-     */
-    private void theaterSearch(File[] theaterFiles, File[] moviesFiles) throws FileNotFoundException {
-        for (File theaterFile: theaterFiles) {
-            theaterList.add(new Theater(theaterFile, moviesFiles));
+        // Searches in File theaterFiles & creates new Theater(theaterFile, moviesFiles) inside theaterList
+        for (File theaterFile: Objects.requireNonNull(theatersDir.listFiles())) {
+            this.theaterList.add(new Theater(theaterFile, Objects.requireNonNull(moviesDir.listFiles())));
         }
-    }
-
-    /**
-     * Gets provided int number Theater
-     * @param number int number
-     * @return Theater theater
-     */
-    public Theater getTheater(int number) {
-        for (Theater theater: theaterList) {
-            if (number == theater.getNumber()) {
-                return theater;
-            }
-        }
-        throw new RuntimeException("Theater number " + number + " not found");
-    }
-
-    /**
-     * Gets number of Theaters
-     * @return int size theaterList
-     */
-    public int getNumberOfTheaters() {
-        return theaterList.size();
     }
 
     /**

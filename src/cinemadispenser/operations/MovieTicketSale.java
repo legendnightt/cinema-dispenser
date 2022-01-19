@@ -40,10 +40,8 @@ public class MovieTicketSale extends Operation {
      * MovieTicketSale builder
      * @param dispenser CinemaTicketDispenser dispenser
      * @param multiplex Multiplex multiplex
-     * @throws IOException IO exception
-     * @throws ClassNotFoundException Class not found
      */
-    public MovieTicketSale(CinemaTicketDispenser dispenser, Multiplex multiplex) throws IOException, ClassNotFoundException {
+    public MovieTicketSale(CinemaTicketDispenser dispenser, Multiplex multiplex) {
         super(dispenser, multiplex);
         File directory = new File(this.serializableDirectory);
         // creates /serializable directory if it doesn't exist
@@ -53,24 +51,28 @@ public class MovieTicketSale extends Operation {
             }
         }
         File file = new File(this.serializablePath);
-        if (file.exists()) {
-            LocalDateTime now = LocalDateTime.now();
-            // state.bin FileTime
-            BasicFileAttributes attr = Files.readAttributes(Path.of(this.serializablePath), BasicFileAttributes.class);
-            // converts FileTime into LocalDateTime
-            LocalDateTime convertedFileTime = LocalDateTime.ofInstant(attr.lastModifiedTime().toInstant(), ZoneId.systemDefault());
-            // if state.bin exists & is not created in the same day, new MultiplexState & it creates again
-            if (ChronoUnit.DAYS.between(convertedFileTime, now) != 0) {
-                this.serializeMultiplexState(this.serializablePath);
-                System.out.println("Old State so, new state generated and serialized successfully!");
+        try {
+            if (file.exists()) {
+                LocalDateTime now = LocalDateTime.now();
+                // state.bin FileTime
+                BasicFileAttributes attr = Files.readAttributes(Path.of(this.serializablePath), BasicFileAttributes.class);
+                // converts FileTime into LocalDateTime
+                LocalDateTime convertedFileTime = LocalDateTime.ofInstant(attr.lastModifiedTime().toInstant(), ZoneId.systemDefault());
+                // if state.bin exists & is not created in the same day, new MultiplexState & it creates again Updates everyday
+                if (ChronoUnit.DAYS.between(convertedFileTime, now) != 0) {
+                    this.serializeMultiplexState(this.serializablePath);
+                    System.out.println("Old State so, new state generated and serialized successfully!");
+                } else {
+                    ObjectInputStream in = new ObjectInputStream(new FileInputStream(this.serializablePath));
+                    this.state = (MultiplexState) in.readObject();
+                    System.out.println("New state created from state.bin successfully!");
+                }
             } else {
-                ObjectInputStream in = new ObjectInputStream(new FileInputStream(this.serializablePath));
-                this.state = (MultiplexState) in.readObject();
-                System.out.println("New state created from state.bin successfully!");
+                this.serializeMultiplexState(this.serializablePath);
+                System.out.println("No state.bin file so, New state generated and serialized successfully!");
             }
-        } else {
-            this.serializeMultiplexState(this.serializablePath);
-            System.out.println("No state.bin file so, New state generated and serialized successfully!");
+        } catch (IOException | ClassNotFoundException e) {
+            e.printStackTrace();
         }
         // creates PerformPayment Operation
         this.payment = new PerformPayment(super.getDispenser(), super.getMultiplex());
@@ -357,7 +359,7 @@ public class MovieTicketSale extends Operation {
             ticket.add("   " + super.getMultiplex().getIdiomBundle().getString("MovieTicketSale_Ticket_Title") + " " + selectedFilm.getName());
             ticket.add("   ===================");
             ticket.add("   " + super.getMultiplex().getIdiomBundle().getString("MovieTicketSale_Ticket_Theater") + " " + selectedTheater.getNumber());
-            ticket.add("   " + selectedSession.getHour().toString());
+            ticket.add("   " + super.getMultiplex().getIdiomBundle().getString("MovieTicketSale_Ticket_Session") + " " + selectedSession.getHour().toString());
             ticket.add("   " + super.getMultiplex().getIdiomBundle().getString("MovieTicketSale_Ticket_Row") + " " + seat.getRow());
             ticket.add("   " + super.getMultiplex().getIdiomBundle().getString("MovieTicketSale_Ticket_Seat") + " " + seat.getCol());
             ticket.add("   " + super.getMultiplex().getIdiomBundle().getString("MovieTicketSale_Ticket_Price") + " " + selectedFilm.getPrice() + "$");

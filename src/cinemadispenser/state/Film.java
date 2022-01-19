@@ -50,12 +50,12 @@ public class Film implements Serializable {
         while (sc.hasNextLine()) {
             String line = sc.nextLine();
             if (line.startsWith("Title: ")) {
-                name = cleanLine(line);
+                this.name = cleanLine(line);
             } else if (line.startsWith("Description: ")) {
-                description = cleanLine(line);
+                this.description = cleanLine(line);
             } else if (line.startsWith("Sessions: ")) {
                 String sessions = cleanLine(line);
-                duration = (int) HOURS.between(
+                this.duration = (int) HOURS.between(
                         // first session
                         LocalTime.parse(sessions.substring(0, 5), DateTimeFormatter.ofPattern("HH:mm")),
                         // second session
@@ -67,11 +67,11 @@ public class Film implements Serializable {
                     sessions = sessions.substring(sessions.indexOf(":") + 3).trim();
                 }
             } else if (line.startsWith("Poster: ")) {
-                poster = new File("./src/resources/movies/images/" + cleanLine(line)).toString();
+                this.poster = new File("./src/resources/movies/images/" + cleanLine(line)).toString();
             } else if (line.startsWith("Price: ")) {
                 for (char ch : line.toCharArray()) {
                     if (Character.isDigit(ch)) {
-                        price = Character.getNumericValue(ch);
+                        this.price = Character.getNumericValue(ch);
                     }
                 }
             }
@@ -92,7 +92,7 @@ public class Film implements Serializable {
      * @return String name
      */
     public String getName() {
-        return name;
+        return this.name;
     }
 
     /**
@@ -100,7 +100,7 @@ public class Film implements Serializable {
      * @return String description
      */
     public String getDescription() {
-        return description;
+        return this.description;
     }
 
     /**
@@ -108,7 +108,7 @@ public class Film implements Serializable {
      * @return int duration
      */
     public int getDuration() {
-        return duration;
+        return this.duration;
     }
 
     /**
@@ -116,7 +116,7 @@ public class Film implements Serializable {
      * @return int price
      */
     public int getPrice() {
-        return price;
+        return this.price;
     }
 
     /**
@@ -124,7 +124,7 @@ public class Film implements Serializable {
      * @return File poster
      */
     public String getPoster() {
-        return poster;
+        return this.poster;
     }
 
     /**
