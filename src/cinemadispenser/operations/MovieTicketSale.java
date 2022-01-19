@@ -293,7 +293,7 @@ public class MovieTicketSale extends Operation {
      */
     private ArrayList<Seat> selectSeats(Theater selectedTheater, Session selectedSession) {
         this.displaySeats(selectedTheater, selectedSession);
-        int maxSeats = 3;
+        int maxSeats = 4;
         int contSeats = 0;
         ArrayList<Seat> selectedSeats = new ArrayList<>();
         char option = super.getDispenser().waitEvent(30);

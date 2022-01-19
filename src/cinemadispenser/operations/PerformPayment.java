@@ -49,23 +49,43 @@ public class PerformPayment extends Operation {
                     // waits 30 seconds with credit card spelled
                     super.getDispenser().setTitle(super.getMultiplex().getIdiomBundle().getString("PerformPayment_CreditCardExpelled_Title"));
                     super.getDispenser().setDescription(super.getMultiplex().getIdiomBundle().getString("PerformPayment_CreditCardExpelled_Description"));
-                    boolean expelled = super.getDispenser().expelCreditCard(30);
-                    // credit card is retain definitely if time expires
-                    if (!expelled) {
-                        super.getDispenser().retainCreditCard(true);
-                        super.getDispenser().setTitle(super.getMultiplex().getIdiomBundle().getString("PerformPayment_CreditCardRetained_Title"));
-                        super.getDispenser().setDescription(super.getMultiplex().getIdiomBundle().getString("PerformPayment_CreditCardRetained_Description"));
-                        // waits 5s for reading message
-                        super.getDispenser().waitEvent(10);
-                    }
+                    this.retainCreditCard();
                 } catch (CommunicationException error) {
                     super.getMultiplex().setPurchaseStatus(false);
+                    this.displayCommunicationError();
+                    this.retainCreditCard();
                 }
             } else {
                 super.getMultiplex().setPurchaseStatus(false);
             }
         } else {
             super.getMultiplex().setPurchaseStatus(false);
+            this.displayCommunicationError();
+        }
+    }
+
+    /**
+     * Displays communication error message
+     */
+    private void displayCommunicationError() {
+        super.getDispenser().setTitle(super.getMultiplex().getIdiomBundle().getString("PerformPayment_!comunicationAvaiable_Title"));
+        super.getDispenser().setDescription(super.getMultiplex().getIdiomBundle().getString("PerformPayment_!comunicationAvaiable_Description"));
+        // waits 10s for reading message
+        super.getDispenser().waitEvent(10);
+    }
+
+    /**
+     * Waits for credit card expelled, if time goes to 0 then retains Credit Card definitely & displays message
+     */
+    private void retainCreditCard() {
+        boolean expelled = super.getDispenser().expelCreditCard(30);
+        // credit card is retain definitely if time expires
+        if (!expelled) {
+            super.getDispenser().retainCreditCard(true);
+            super.getDispenser().setTitle(super.getMultiplex().getIdiomBundle().getString("PerformPayment_CreditCardRetained_Title"));
+            super.getDispenser().setDescription(super.getMultiplex().getIdiomBundle().getString("PerformPayment_CreditCardRetained_Description"));
+            // waits 10s for reading message
+            super.getDispenser().waitEvent(10);
         }
     }
 
