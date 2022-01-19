@@ -373,7 +373,7 @@ public class MovieTicketSale extends Operation {
         // prints PerformPayment info
         super.getDispenser().setMessageMode();
         super.getDispenser().setTitle(super.getMultiplex().getIdiomBundle().getString("PerformPayment_Title"));
-        super.getDispenser().setDescription(selectedSeats.size() + " " + super.getMultiplex().getIdiomBundle().getString("PerformPayment_Description") + " " +  selectedFilm.getName() + ": " + super.getMultiplex().getPurchasePrice() + "$");
+        super.getDispenser().setDescription(selectedSeats.size() + " " + super.getMultiplex().getIdiomBundle().getString("PerformPayment_Description") + " " +  selectedFilm.getName() + "(" + selectedSession.getHour() + "): " + super.getMultiplex().getPurchasePrice() + "$");
         super.getDispenser().setOption(0, null);
         super.getDispenser().setOption(1, null);
         this.payment.doOperation();
@@ -382,7 +382,13 @@ public class MovieTicketSale extends Operation {
             try {
                 this.deserializeMultiplexState(this.serializablePath);
                 this.serializeMultiplexState(this.serializablePath);
+                super.getDispenser().setTitle("Printing Tickets");
+                super.getDispenser().setDescription("........");
+                super.getDispenser().waitEvent(5);
                 this.printTickets(selectedTheater, selectedFilm, selectedSession, selectedSeats);
+                super.getDispenser().setTitle("Take your Tickets");
+                super.getDispenser().setDescription("Thanks for trusting us for watching best cinema movies\nHope to see you back!");
+                super.getDispenser().waitEvent(10);
             } catch (IOException e) {
                 e.printStackTrace();
             }
