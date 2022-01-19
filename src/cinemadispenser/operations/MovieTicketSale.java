@@ -82,7 +82,9 @@ public class MovieTicketSale extends Operation {
      * @throws IOException if something fails inside
      */
     private void serializeMultiplexState(String serializablePath) throws IOException {
-        this.state = new MultiplexState();
+        if (this.state == null) {
+            this.state = new MultiplexState();
+        }
         ObjectOutputStream out = new ObjectOutputStream(new FileOutputStream(serializablePath));
         out.writeObject(this.state);
         out.flush();
@@ -251,29 +253,29 @@ public class MovieTicketSale extends Operation {
 
     /**
      * Display Theater Session seats
-     * @param theater Theater selectedTheater
-     * @param session Session SelectedSession
+     * @param selectedTheater Theater selectedTheater
+     * @param selectedSession Session SelectedSession
      */
-    private void displaySeats(Theater theater, Session session) {
-        super.getDispenser().setTheaterMode(theater.getMaxRows(), theater.getMaxCols());
-        super.getDispenser().setTitle(super.getMultiplex().getIdiomBundle().getString("MovieTicketSale_Seat_Title") + ": " + session.getHour());
+    private void displaySeats(Theater selectedTheater, Session selectedSession) {
+        super.getDispenser().setTheaterMode(selectedTheater.getMaxRows(), selectedTheater.getMaxCols());
+        super.getDispenser().setTitle(super.getMultiplex().getIdiomBundle().getString("MovieTicketSale_Seat_Title") + ": " + selectedSession.getHour());
         super.getDispenser().setOption(0, super.getMultiplex().getIdiomBundle().getString("Exit"));
         super.getDispenser().setOption(1, super.getMultiplex().getIdiomBundle().getString("Continue"));
-        for (int row = 1; row < theater.getMaxRows() + 1; row++) {
-            for (int col = 1; col < theater.getMaxCols() + 1; col++) {
-                // checks if Seat is contained in Session occupiedSeatArrayList
-                if (session.isContained(row, col)) {
-                    // unoccupied Seat
-                    if (!session.isOccupied(row, col)) {
-                        super.getDispenser().markSeat(row, col, 2);
-                    }
+        for (int row = 1; row < selectedTheater.getMaxRows() + 1; row++) {
+            for (int col = 1; col < selectedTheater.getMaxCols() + 1; col++) {
+                // checks if Seat is contained in Session Set occupiedSeatSet
+                if (selectedSession.isOccupied(row, col)) {
                     // occupied Seat
-                    else {
-                        super.getDispenser().markSeat(row, col, 1);
-                    }
+                    super.getDispenser().markSeat(row, col, 1);
                 }
-                // empty space
+                // checks if Seat is contained in Theater Set SeatSet
+                else if (selectedTheater.getSeatSet().contains(new Seat(row, col))) {
+                    // unoccupied Seat
+                    super.getDispenser().markSeat(row, col, 2);
+                }
+                // not contained
                 else {
+                    // empty space
                     super.getDispenser().markSeat(row, col, 0);
                 }
             }

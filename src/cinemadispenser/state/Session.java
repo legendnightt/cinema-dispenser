@@ -2,7 +2,7 @@ package cinemadispenser.state;
 
 import java.io.Serializable;
 import java.time.LocalTime;
-import java.util.ArrayList;
+import java.util.HashSet;
 import java.util.Set;
 
 /**
@@ -17,27 +17,14 @@ public class Session implements Serializable {
     /**
      * Session Seat status ArrayList
      */
-    private final ArrayList<Seat> occupiedSeatArrayList;
+    private final Set<Seat> occupiedSeatSet = new HashSet<>();
 
     /**
      * Session builder
      * @param hour LocalTime hour
-     * @param seatSet Set seatSet
      */
-    public Session(LocalTime hour, Set<Seat> seatSet) {
+    public Session(LocalTime hour) {
         this.hour = hour;
-        this.occupiedSeatArrayList = new ArrayList<>();
-        this.occupiedSeatArrayList.addAll(seatSet);
-    }
-
-    /**
-     * Checks if a specific Seat is contained in occupiedSeatArrayList
-     * @param row Seat int row
-     * @param col Seat int column
-     * @return boolean, if Seat exits true, else false
-     */
-    public boolean isContained(int row, int col) {
-        return this.occupiedSeatArrayList.contains(new Seat(row, col));
     }
 
     /**
@@ -47,28 +34,25 @@ public class Session implements Serializable {
      * @return boolean, if Seat is occupied true, else false
      */
     public boolean isOccupied(int row, int col) {
-        // uses index of new Seat(row, col) Object, for getting Seat Object inside occupiedSeatArrayList & checking if it's occupied
-        return this.occupiedSeatArrayList.get(this.occupiedSeatArrayList.indexOf(new Seat(row, col))).getOccupied();
+        return this.occupiedSeatSet.contains(new Seat(row, col));
     }
 
     /**
-     * Occupies a seat setting occupied to true
+     * Occupies a seat adding Seat to ArrayList occupiedSeatArrayList
      * @param row Seat int row
      * @param col Seat int column
      */
     public void ocuppiesSeat(int row, int col) {
-        // uses index of new Seat(row, col) Object, for getting Seat Object inside occupiedSeatArrayList & sets occupied
-        this.occupiedSeatArrayList.get(this.occupiedSeatArrayList.indexOf(new Seat(row, col))).setOccupied(true);
+        this.occupiedSeatSet.add(new Seat(row, col));
     }
 
     /**
-     * UnOccupies a seat setting occupied to false
+     * UnOccupies a seat removing Seat to ArrayList occupiedSeatArrayList
      * @param row Seat int row
      * @param col Seat int column
      */
     public void unocuppiesSeat(int row, int col) {
-        // uses index of new Seat(row, col) Object, for getting Seat Object inside occupiedSeatArrayList & sets unoccupied
-        this.occupiedSeatArrayList.get(this.occupiedSeatArrayList.indexOf(new Seat(row, col))).setOccupied(false);
+        this.occupiedSeatSet.remove(new Seat(row, col));
     }
 
     /**

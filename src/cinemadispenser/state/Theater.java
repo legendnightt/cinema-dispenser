@@ -115,7 +115,7 @@ public class Theater implements Serializable {
                     String sessions = line.substring(line.indexOf(":") + 1).trim();
                     // while for getting sessions from sessions string & converts them to LocalTime format to create new Session
                     while (!sessions.isEmpty()) {
-                        this.sessionList.add(new Session(LocalTime.parse(sessions.substring(0, 5), DateTimeFormatter.ofPattern("HH:mm")), this.seatSet));
+                        this.sessionList.add(new Session(LocalTime.parse(sessions.substring(0, 5), DateTimeFormatter.ofPattern("HH:mm"))));
                         sessions = sessions.substring(sessions.indexOf(":") + 3).trim();
                     }
                 }

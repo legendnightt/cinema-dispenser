@@ -9,10 +9,6 @@ import java.util.Objects;
 public class Seat implements Serializable {
 
     /**
-     * Seat status
-     */
-    private boolean occupied = false;
-    /**
      * Seat row
      */
     private final int row;
@@ -51,22 +47,6 @@ public class Seat implements Serializable {
     @Override
     public int hashCode() {
         return Objects.hash(row, col);
-    }
-
-    /**
-     * Sets occupied attribute
-     * @param occupied boolean
-     */
-    public void setOccupied(boolean occupied) {
-        this.occupied = occupied;
-    }
-
-    /**
-     * Gets boolean occupied
-     * @return boolean occupied
-     */
-    public boolean getOccupied() {
-        return occupied;
     }
 
     /**
