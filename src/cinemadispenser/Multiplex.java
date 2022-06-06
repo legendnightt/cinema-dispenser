@@ -33,6 +33,10 @@ public class Multiplex {
      * boolean purchaseStatus PerformPayment
      */
     private boolean purchaseStatus = false;
+    /**
+     * boolean socioStatus PerformPayment
+     */
+    private boolean socioStatus = false;
 
     /**
      * Starts all, and have main loop of the application
@@ -125,6 +129,22 @@ public class Multiplex {
      */
     public boolean getPurchaseStatus() {
         return this.purchaseStatus;
+    }
+
+    /**
+     * Sets boolean socioStatus PerformPayment
+     * @param socioStatus boolean socioStatus PerformPayment
+     */
+    public void setSocioStatus(boolean socioStatus) {
+        this.socioStatus = socioStatus;
+    }
+
+    /**
+     * Gets boolean socioStatus PerformPayment
+     * @return boolean socioStatus PerformPayment
+     */
+    public boolean getSocioStatus() {
+        return this.socioStatus;
     }
 
 }

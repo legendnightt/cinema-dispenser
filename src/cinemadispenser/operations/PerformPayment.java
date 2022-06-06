@@ -6,6 +6,10 @@ import sienens.CinemaTicketDispenser;
 import urjc.UrjcBankServer;
 
 import javax.naming.CommunicationException;
+import java.io.File;
+import java.io.FileNotFoundException;
+import java.io.FileReader;
+import java.util.*;
 
 /**
  * PerformPayment class extends Operation
@@ -16,6 +20,10 @@ public class PerformPayment extends Operation {
      * UrjcBankServer bank
      */
     private final UrjcBankServer bank;
+    /**
+     * List socioList
+     */
+    private final List<Long> socioList = new ArrayList<>();
 
     /**
      * PerformPayment builder
@@ -34,6 +42,8 @@ public class PerformPayment extends Operation {
     public void doOperation() {
         // checks bank communication
         if (this.bank.comunicationAvaiable()) {
+            // loads socios File
+            this.loadSocios();
             // waits for de credit card
             char option = super.getDispenser().waitEvent(30);
             // credit card inserted
@@ -44,6 +54,14 @@ public class PerformPayment extends Operation {
                     super.getDispenser().setTitle(super.getMultiplex().getIdiomBundle().getString("PerformPayment_ProcessingPayment"));
                     super.getDispenser().setDescription("........");
                     super.getDispenser().waitEvent(5);
+                    // discount for socios 30%
+                    if (this.socioList.contains(super.getDispenser().getCardNumber())) {
+                        super.getMultiplex().setPurchasePrice((int) (super.getMultiplex().getPurchasePrice() - (super.getMultiplex().getPurchasePrice() * 0.3)));
+                        this.getMultiplex().setSocioStatus(true);
+                        super.getDispenser().setTitle("Discount for Socios!");
+                        super.getDispenser().setDescription("You get a discount for being socio so your import is now: " + super.getMultiplex().getPurchasePrice() + "$");
+                        super.getDispenser().waitEvent(5);
+                    }
                     // tries to charge Amount
                     super.getMultiplex().setPurchaseStatus(this.bank.doOperation(super.getDispenser().getCardNumber(), super.getMultiplex().getPurchasePrice()));
                     // waits 30 seconds with credit card spelled
@@ -86,6 +104,32 @@ public class PerformPayment extends Operation {
             super.getDispenser().setDescription(super.getMultiplex().getIdiomBundle().getString("PerformPayment_CreditCardRetained_Description"));
             // waits 10s for reading message
             super.getDispenser().waitEvent(10);
+        }
+    }
+
+    /**
+     * Makes possible to read & load Socios txt
+     */
+    private void loadSocios() {
+        File sociosFile = new File("./src/resources/socios/socios.txt");
+        try {
+            Scanner scSocio = new Scanner(new FileReader(Objects.requireNonNull(sociosFile)));
+            while (scSocio.hasNextLine()) {
+                String sociosLine = scSocio.nextLine();
+                StringBuilder socioCard = new StringBuilder();
+                while (!sociosLine.isEmpty()) {
+                    socioCard.append(sociosLine, 0, 4);
+                    // exit when last number of credit card is readed
+                    if (!(sociosLine.length() == 4)) {
+                        sociosLine = sociosLine.substring(sociosLine.indexOf(" ") + 1).trim();
+                    } else {
+                        break;
+                    }
+                }
+                this.socioList.add(Long.parseLong(String.valueOf(socioCard)));
+            }
+        } catch (FileNotFoundException e) {
+            e.printStackTrace();
         }
     }
 

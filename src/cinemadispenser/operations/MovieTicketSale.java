@@ -55,7 +55,7 @@ public class MovieTicketSale extends Operation {
             if (file.exists()) {
                 LocalDateTime now = LocalDateTime.now();
                 // state.bin FileTime
-                BasicFileAttributes attr = Files.readAttributes(Path.of(this.serializablePath), BasicFileAttributes.class);
+                BasicFileAttributes attr = Files.readAttributes(new File(this.serializablePath).toPath(), BasicFileAttributes.class);
                 // converts FileTime into LocalDateTime
                 LocalDateTime convertedFileTime = LocalDateTime.ofInstant(attr.lastModifiedTime().toInstant(), ZoneId.systemDefault());
                 // if state.bin exists & is not created in the same day, new MultiplexState & it creates again Updates everyday
@@ -260,15 +260,20 @@ public class MovieTicketSale extends Operation {
      * @param selectedTheater Theater selectedTheater
      * @param selectedSession Session SelectedSession
      */
-    private void displaySeats(Theater selectedTheater, Session selectedSession) {
+    private void displaySeats(Theater selectedTheater, Session selectedSession, ArrayList<Seat> selectedSeats) {
         super.getDispenser().setTheaterMode(selectedTheater.getMaxRows(), selectedTheater.getMaxCols());
         super.getDispenser().setTitle(super.getMultiplex().getIdiomBundle().getString("MovieTicketSale_Seat_Title") + ": " + selectedSession.getHour());
         super.getDispenser().setOption(0, super.getMultiplex().getIdiomBundle().getString("Exit"));
         super.getDispenser().setOption(1, super.getMultiplex().getIdiomBundle().getString("Continue"));
         for (int row = 1; row < selectedTheater.getMaxRows() + 1; row++) {
             for (int col = 1; col < selectedTheater.getMaxCols() + 1; col++) {
+                // checks if Seat is selected by the customer
+                if (selectedSeats.contains(new Seat(row, col))) {
+                    // selected Seat
+                    super.getDispenser().markSeat(row, col, 3);
+                }
                 // checks if Seat is contained in Session Set occupiedSeatSet
-                if (selectedSession.isOccupied(row, col)) {
+                else if (selectedSession.isOccupied(row, col)) {
                     // occupied Seat
                     super.getDispenser().markSeat(row, col, 1);
                 }
@@ -292,10 +297,10 @@ public class MovieTicketSale extends Operation {
      * @param selectedSession Session selectedSession
      */
     private ArrayList<Seat> selectSeats(Theater selectedTheater, Session selectedSession) {
-        this.displaySeats(selectedTheater, selectedSession);
         int maxSeats = 4;
         int contSeats = 0;
         ArrayList<Seat> selectedSeats = new ArrayList<>();
+        this.displaySeats(selectedTheater, selectedSession, selectedSeats);
         char option = super.getDispenser().waitEvent(30);
         while ((int) option != 0) {
             // Exit
@@ -329,7 +334,7 @@ public class MovieTicketSale extends Operation {
                     selectedSeats.remove(new Seat(row, col));
                     contSeats--;
                 }
-                this.displaySeats(selectedTheater, selectedSession);
+                this.displaySeats(selectedTheater, selectedSession, selectedSeats);
                 option = super.getDispenser().waitEvent(30);
             }
         }
@@ -358,13 +363,19 @@ public class MovieTicketSale extends Operation {
             ArrayList<String> ticket = new ArrayList<>();
             ticket.add("   " + super.getMultiplex().getIdiomBundle().getString("MovieTicketSale_Ticket_Title") + " " + selectedFilm.getName());
             ticket.add("   ===================");
+            // Ticket info for Socios
+            if (super.getMultiplex().getSocioStatus()) {
+                ticket.add("   30% discount for being Socio!");
+                ticket.add("   ===================");
+            }
             ticket.add("   " + super.getMultiplex().getIdiomBundle().getString("MovieTicketSale_Ticket_Theater") + " " + selectedTheater.getNumber());
             ticket.add("   " + super.getMultiplex().getIdiomBundle().getString("MovieTicketSale_Ticket_Session") + " " + selectedSession.getHour().toString());
             ticket.add("   " + super.getMultiplex().getIdiomBundle().getString("MovieTicketSale_Ticket_Row") + " " + seat.getRow());
             ticket.add("   " + super.getMultiplex().getIdiomBundle().getString("MovieTicketSale_Ticket_Seat") + " " + seat.getCol());
-            ticket.add("   " + super.getMultiplex().getIdiomBundle().getString("MovieTicketSale_Ticket_Price") + " " + selectedFilm.getPrice() + "$");
+            ticket.add("   " + super.getMultiplex().getIdiomBundle().getString("MovieTicketSale_Ticket_Price") + " " + (this.getMultiplex().getPurchasePrice() / selectedSeats.size()) + "$");
             super.getDispenser().print(ticket);
         }
+        super.getMultiplex().setSocioStatus(false);
     }
 
     /**
